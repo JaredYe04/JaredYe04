@@ -1034,6 +1034,11 @@ function generateStatsMarkdown(stats) {
     }
   }
 
+  echartsCharts += `📊 **主页浏览量**
+
+  ![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
+  `;
+
   // 提交趋势图（使用 SVG 转 PNG，生成浅色和深色两个版本）
   if (commits30Days && commits30Days.length > 0) {
     try {

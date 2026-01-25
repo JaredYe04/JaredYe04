@@ -13,9 +13,6 @@
 每一次运行，
 都是对明天的调用。
 
-**主页浏览量**
-![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
-
 
 {{STATS_SECTION}}
 

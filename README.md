@@ -13,8 +13,7 @@
 每一次运行，
 都是对明天的调用。
 
-**主页浏览量**
-![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
+
 
 📊 **过去七天我的编程活动统计**
 
@@ -39,6 +38,9 @@ Java           	2 分钟                	░░░░░░░░░░░░░
 提交次数               139 次
 活跃仓库数             7 个
 ```
+📊**主页浏览量**
+
+![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
 
 📊 **编程语言占比**
 
