@@ -1018,7 +1018,7 @@ function generateStatsMarkdown(stats) {
       const imagePathDark = saveSVGAsPNG(pieSVGDark, imageFilenameDark, true);
       
       if (imagePathLight && imagePathDark) {
-        echartsCharts += `📊 **编程语言占比**
+        echartsCharts += `###  📊 **编程语言占比**
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
@@ -1034,11 +1034,11 @@ function generateStatsMarkdown(stats) {
     }
   }
 
-  echartsCharts += `📊 **主页浏览量**
+  echartsCharts += `###  📊 **主页浏览量**
 
   ![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
 
-  
+
   `;
 
   // 提交趋势图（使用 SVG 转 PNG，生成浅色和深色两个版本）
@@ -1077,7 +1077,7 @@ function generateStatsMarkdown(stats) {
   // GitHub API 不提供个人资料主页访问统计，且仓库流量数据需要特殊权限
   // 访问统计已在模板中通过 visitor-badge 徽章显示
 
-  return `📊 **过去七天我的编程活动统计**
+  return `###  📊 **过去七天我的编程活动统计**
 
 \`\`\`
 💬 编程语言: 
