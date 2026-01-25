@@ -2,8 +2,8 @@ name: Update GitHub Stats
 
 on:
   schedule:
-    # 每半小时运行一次
-    - cron: '*/30 * * * *'
+    # 每6小时运行一次
+    - cron: '0 */6 * * *'
   workflow_dispatch: # 允许手动触发
   push:
     branches:
