@@ -827,6 +827,38 @@ function generateCommitTrendSVG(commits30Days, isDark = false) {
   return svg;
 }
 
+// 清理旧的图片文件（保留最新的）
+function cleanOldImages() {
+  try {
+    const imagesDir = path.join(__dirname, 'images');
+    if (!fs.existsSync(imagesDir)) {
+      return;
+    }
+    
+    const files = fs.readdirSync(imagesDir);
+    const imageFiles = files.filter(f => f.endsWith('.png'));
+    
+    // 按修改时间排序，保留最新的文件
+    const filesWithTime = imageFiles.map(file => ({
+      name: file,
+      path: path.join(imagesDir, file),
+      mtime: fs.statSync(path.join(imagesDir, file)).mtime.getTime(),
+    })).sort((a, b) => b.mtime - a.mtime);
+    
+    // 保留最新的 10 个文件，删除其他
+    if (filesWithTime.length > 10) {
+      const filesToDelete = filesWithTime.slice(10);
+      filesToDelete.forEach(file => {
+        fs.unlinkSync(file.path);
+        console.log(`🗑️  删除旧图片: ${file.name}`);
+      });
+      console.log(`✅ 已清理 ${filesToDelete.length} 个旧图片文件`);
+    }
+  } catch (error) {
+    console.warn('清理旧图片失败:', error.message);
+  }
+}
+
 // 将 SVG 转换为 PNG 并保存
 function saveSVGAsPNG(svgString, filename, isDark = false) {
   try {
@@ -1138,6 +1170,10 @@ async function main() {
     console.log('📝 生成统计报告...');
     const statsMarkdown = generateStatsMarkdown(stats);
     await updateREADME(statsMarkdown);
+    
+    // 清理旧的图片文件
+    console.log('\n🗑️  清理旧的图片文件...');
+    cleanOldImages();
 
     console.log('\n✨ 统计完成！');
     console.log(`   - 提交次数（过去7天）: ${commits.length}`);
