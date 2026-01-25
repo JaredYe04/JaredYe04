@@ -95,39 +95,6 @@ function getTimeDiff(start, end) {
   return Math.max(0, Math.floor((new Date(end) - new Date(start)) / 1000));
 }
 
-// 获取 GitHub 个人资料主页的访问统计
-// 注意：GitHub API 不提供个人资料主页的访问统计
-// 这里使用仓库访问统计作为参考指标
-// 如需精确的个人资料主页访问统计，建议使用第三方服务（如 visitor-badge.glitch.me）
-async function getProfileViews() {
-  try {
-    // 使用仓库访问统计作为参考（虽然不是个人资料主页，但可以作为指标）
-    const { data } = await octokit.repos.getViews({
-      owner: REPO_OWNER,
-      repo: REPO_NAME,
-      per: 'day',
-    });
-    
-    // 计算总访问量（过去14天的数据）
-    const totalViews = data.views.reduce((sum, view) => sum + view.count, 0);
-    const uniqueViews = data.views.reduce((sum, view) => sum + view.uniques, 0);
-    
-    return {
-      total: totalViews,
-      unique: uniqueViews,
-      lastUpdated: new Date().toISOString(),
-    };
-  } catch (error) {
-    // 如果无法获取，返回默认值
-    console.warn('获取访问统计失败:', error.message);
-    console.warn('提示: GitHub API 不提供个人资料主页的访问统计，这里使用仓库访问统计作为参考');
-    return {
-      total: 0,
-      unique: 0,
-      lastUpdated: new Date().toISOString(),
-    };
-  }
-}
 
 // 获取用户的所有仓库
 async function getUserRepos() {
@@ -946,7 +913,7 @@ function saveSVGAsPNG(svgString, filename, isDark = false) {
 
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
-  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days, profileViews } = stats;
+  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
 
   // 计算语言占比
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
@@ -1076,14 +1043,9 @@ function generateStatsMarkdown(stats) {
     }
   }
 
-  // 访问统计（使用 visitor-badge 服务，这里显示仓库访问统计作为参考）
-  const viewsTextZh = profileViews && profileViews.total > 0 
-    ? `👁️ 仓库访问: 总计 ${profileViews.total.toLocaleString()} 次 | 独立访问 ${profileViews.unique.toLocaleString()} 次（个人资料主页访问统计见下方徽章）`
-    : '👁️ 仓库访问: 统计中...';
-  
-  const viewsTextEn = profileViews && profileViews.total > 0 
-    ? `👁️ Repository Views: Total ${profileViews.total.toLocaleString()} | Unique ${profileViews.unique.toLocaleString()} (Profile views see badge below)`
-    : '👁️ Repository Views: Loading...';
+  // 访问统计（通过 visitor-badge 徽章显示，不在这里显示）
+  // GitHub API 不提供个人资料主页访问统计，且仓库流量数据需要特殊权限
+  // 访问统计已在模板中通过 visitor-badge 徽章显示
 
   // 生成英文版语言统计文本
   let languageTextEn = '';
@@ -1122,8 +1084,6 @@ ${usageText}
 总代码行数 (LOC)      ${totalLOC.toLocaleString()} 行
 提交次数               ${commitCount} 次
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
-
-${viewsTextZh}
 \`\`\`
 
 ${echartsCharts}
@@ -1146,8 +1106,6 @@ ${usageTextEn}
 Total Lines of Code (LOC)      ${totalLOC.toLocaleString()} lines
 Commits                        ${commitCount} times
 Active Repositories            ${new Set(commits.map(c => c.repoFullName)).size} repos
-
-${viewsTextEn}
 \`\`\`
 
 ${echartsCharts}
@@ -1196,10 +1154,6 @@ async function main() {
     const commits = await getLast7DaysCommits();
     console.log(`✅ 找到 ${commits.length} 个 commits（过去7天）\n`);
 
-    // 获取个人资料主页访问统计
-    console.log('👁️ 获取个人资料主页访问统计...');
-    const profileViews = await getProfileViews();
-    console.log(`✅ 总访问量: ${profileViews.total} 次，独立访问: ${profileViews.unique} 次\n`);
 
     if (commits.length === 0) {
       console.log('⚠️ 过去七天暂无 commits，使用空数据');
@@ -1210,7 +1164,6 @@ async function main() {
         usageTime: { totalSeconds: 0, sessions: [] },
         commits: [],
         commits30Days: commits30Days,
-        profileViews: profileViews,
       };
       const statsMarkdown = generateStatsMarkdown(emptyStats);
       await updateREADME(statsMarkdown);
@@ -1238,7 +1191,6 @@ async function main() {
       usageTime,
       commits,
       commits30Days,
-      profileViews,
     };
 
     console.log('📝 生成统计报告...');

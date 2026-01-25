@@ -36,22 +36,23 @@ is a call to tomorrow.
 
 </div>
 
+<!-- 语言切换样式 -->
 <style>
-  html[lang="zh-CN"] div[lang="en"],
-  html[lang="zh"] div[lang="en"],
-  html[lang="zh-Hans"] div[lang="en"],
-  html[lang="zh-Hant"] div[lang="en"] {
-    display: none !important;
-  }
-  html[lang="en"] div[lang="zh-CN"],
-  html[lang="en-US"] div[lang="zh-CN"],
-  html[lang="en-GB"] div[lang="zh-CN"] {
-    display: none !important;
-  }
-  /* 默认显示中文 */
-  div[lang="en"] {
-    display: none !important;
-  }
+html[lang="zh-CN"] div[lang="en"],
+html[lang="zh"] div[lang="en"],
+html[lang="zh-Hans"] div[lang="en"],
+html[lang="zh-Hant"] div[lang="en"] {
+  display: none !important;
+}
+html[lang="en"] div[lang="zh-CN"],
+html[lang="en-US"] div[lang="zh-CN"],
+html[lang="en-GB"] div[lang="zh-CN"] {
+  display: none !important;
+}
+/* 默认显示中文 */
+div[lang="en"] {
+  display: none !important;
+}
 </style>
 
 {{STATS_SECTION}}
