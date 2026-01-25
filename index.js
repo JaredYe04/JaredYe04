@@ -528,21 +528,22 @@ function generateLanguagePieChartSVG(languageStats, usageTime, isDark = false) {
   const textColor = isDark ? '#c9d1d9' : '#333';
   const textColorSecondary = isDark ? '#8b949e' : '#555';
   
-  // SVG 尺寸
-  const width = 600;
-  const height = 450;
-  const centerX = width / 2;
-  const centerY = height / 2 + 20; // 稍微下移，为标题留空间
-  const radius = 120;
-  const innerRadius = 60;
+  // SVG 尺寸（提高分辨率：2倍尺寸）
+  const scale = 2; // 2倍分辨率
+  const width = 600 * scale;
+  const height = 450 * scale;
+  const centerX = width / 2 - 50 * scale; // 向左移动，为右侧图例留空间
+  const centerY = height / 2 + 20 * scale; // 稍微下移，为标题留空间
+  const radius = 120 * scale;
+  const innerRadius = 60 * scale;
   
   let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">\n`;
   
   // 背景
   svg += `  <rect width="${width}" height="${height}" fill="${bgColor}"/>\n`;
   
-  // 标题
-  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="${textColor}">编程语言占比</text>\n`;
+  // 标题（按比例放大字体）
+  svg += `  <text x="${width / 2}" y="${30 * scale}" text-anchor="middle" font-size="${18 * scale}" font-weight="bold" fill="${textColor}">编程语言占比</text>\n`;
   
   // 计算饼图扇形
   let currentAngle = -90; // 从顶部开始
@@ -590,21 +591,20 @@ function generateLanguagePieChartSVG(languageStats, usageTime, isDark = false) {
   // 绘制扇形
   slices.forEach(slice => {
     svg += `  <path d="${slice.path}" fill="${slice.color}" stroke="${bgColor}" stroke-width="2"/>\n`;
-    // 标签（如果百分比足够大）
+    // 标签（如果百分比足够大，按比例放大字体）
     if (slice.entry.percentage > 5) {
-      svg += `  <text x="${slice.labelX}" y="${slice.labelY}" text-anchor="middle" font-size="11" font-weight="bold" fill="${textColor}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
+      svg += `  <text x="${slice.labelX}" y="${slice.labelY}" text-anchor="middle" font-size="${11 * scale}" font-weight="bold" fill="${textColor}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
     }
   });
   
-  // 图例（右侧）
-  let legendX = 350;
-  let legendY = 100;
+  // 图例（右侧，远离饼图，按比例放大）
+  let legendX = 450 * scale; // 向右移动，避免与饼图重叠
+  let legendY = 100 * scale;
   slices.forEach((slice, index) => {
-    svg += `  <rect x="${legendX}" y="${legendY + index * 25}" width="15" height="15" fill="${slice.color}"/>\n`;
-    const displayName = slice.entry.lang.length > 15 ? slice.entry.lang.substring(0, 15) + '...' : slice.entry.lang;
-    svg += `  <text x="${legendX + 20}" y="${legendY + index * 25 + 12}" font-size="11" fill="${textColor}">${displayName}</text>\n`;
-    svg += `  <text x="${legendX + 20}" y="${legendY + index * 25 + 25}" font-size="10" fill="${textColorSecondary}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
-    legendY += 2; // 调整间距
+    svg += `  <rect x="${legendX}" y="${legendY + index * 30 * scale}" width="${15 * scale}" height="${15 * scale}" fill="${slice.color}"/>\n`;
+    const displayName = slice.entry.lang.length > 12 ? slice.entry.lang.substring(0, 12) + '...' : slice.entry.lang;
+    svg += `  <text x="${legendX + 20 * scale}" y="${legendY + index * 30 * scale + 12 * scale}" font-size="${11 * scale}" fill="${textColor}">${displayName}</text>\n`;
+    svg += `  <text x="${legendX + 20 * scale}" y="${legendY + index * 30 * scale + 24 * scale}" font-size="${10 * scale}" fill="${textColorSecondary}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
   });
   
   svg += `</svg>`;
@@ -662,10 +662,11 @@ function generateCommitTrendSVG(commits30Days, isDark = false) {
     .slice(0, 8)
     .map(([repo]) => repo);
 
-  // SVG 尺寸
-  const width = 1000;
-  const height = 500;
-  const padding = { top: 60, right: 200, bottom: 60, left: 60 }; // 增加右边距，减少下边距
+  // SVG 尺寸（提高分辨率：2倍尺寸）
+  const scale = 2; // 2倍分辨率
+  const width = 1000 * scale;
+  const height = 500 * scale;
+  const padding = { top: 60 * scale, right: 200 * scale, bottom: 60 * scale, left: 60 * scale }; // 增加右边距，减少下边距
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
@@ -757,68 +758,68 @@ function generateCommitTrendSVG(commits30Days, isDark = false) {
   // 背景
   svg += `  <rect width="${width}" height="${height}" fill="${bgColor}"/>\n`;
   
-  // 标题
-  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="${textColor}">过去30天提交趋势</text>\n`;
+  // 标题（按比例放大字体）
+  svg += `  <text x="${width / 2}" y="${30 * scale}" text-anchor="middle" font-size="${18 * scale}" font-weight="bold" fill="${textColor}">过去30天提交趋势</text>\n`;
   
-  // 网格线
+  // 网格线（按比例放大）
   for (let i = 0; i <= 5; i++) {
     const y = padding.top + (chartHeight / 5) * i;
     const value = Math.round(maxCount - (maxCount / 5) * i);
-    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="${gridColor}" stroke-width="1" stroke-dasharray="2,2"/>\n`;
-    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" font-weight="bold" fill="${textColorSecondary}">${value}</text>\n`;
+    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="${gridColor}" stroke-width="${1 * scale}" stroke-dasharray="${2 * scale},${2 * scale}"/>\n`;
+    svg += `  <text x="${padding.left - 10 * scale}" y="${y + 5 * scale}" text-anchor="end" font-size="${12 * scale}" font-weight="bold" fill="${textColorSecondary}">${value}</text>\n`;
   }
   
-  // Y轴标签（加粗）
-  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
+  // Y轴标签（加粗，按比例放大）
+  svg += `  <text x="${20 * scale}" y="${height / 2}" text-anchor="middle" font-size="${14 * scale}" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-90, ${20 * scale}, ${height / 2})">提交次数</text>\n`;
   
   // 总面积填充（总计）
   svg += `  <path d="${generateAreaPath(totalPoints, padding.top + chartHeight)}" fill="rgba(84, 112, 198, 0.1)" stroke="none"/>\n`;
   
-  // 各仓库折线
+  // 各仓库折线（按比例放大）
   repoPoints.forEach(repo => {
-    svg += `  <path d="${generatePath(repo.points, true)}" fill="none" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
+    svg += `  <path d="${generatePath(repo.points, true)}" fill="none" stroke="${repo.color}" stroke-width="${2 * scale}" opacity="0.7"/>\n`;
     // 数据点
     repo.points.forEach(point => {
       if (point.count > 0) {
-        svg += `  <circle cx="${point.x}" cy="${point.y}" r="3" fill="${repo.color}"/>\n`;
+        svg += `  <circle cx="${point.x}" cy="${point.y}" r="${3 * scale}" fill="${repo.color}"/>\n`;
       }
     });
   });
   
-  // 总计折线（最上层，粗一点）
-  svg += `  <path d="${generatePath(totalPoints, true)}" fill="none" stroke="#5470c6" stroke-width="3"/>\n`;
+  // 总计折线（最上层，粗一点，按比例放大）
+  svg += `  <path d="${generatePath(totalPoints, true)}" fill="none" stroke="#5470c6" stroke-width="${3 * scale}"/>\n`;
   
-  // 总计数据点
+  // 总计数据点（按比例放大）
   totalPoints.forEach(point => {
-    svg += `  <circle cx="${point.x}" cy="${point.y}" r="4" fill="#5470c6"/>\n`;
+    svg += `  <circle cx="${point.x}" cy="${point.y}" r="${4 * scale}" fill="#5470c6"/>\n`;
   });
   
-  // X轴标签（每5天显示一个，加粗，字体稍小）
+  // X轴标签（每5天显示一个，加粗，字体稍小，按比例放大）
   dates.forEach((date, i) => {
     if (i % 5 === 0 || i === dates.length - 1) {
       const x = padding.left + (i / (dates.length - 1)) * chartWidth;
-      svg += `  <text x="${x}" y="${height - padding.bottom + 15}" text-anchor="middle" font-size="10" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-30, ${x}, ${height - padding.bottom + 15})">${date}</text>\n`;
+      svg += `  <text x="${x}" y="${height - padding.bottom + 15 * scale}" text-anchor="middle" font-size="${10 * scale}" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-30, ${x}, ${height - padding.bottom + 15 * scale})">${date}</text>\n`;
     }
   });
   
-  // 图例（调整位置，避免溢出）
-  let legendX = padding.left + chartWidth + 15;
-  let legendY = padding.top + 20;
-  const legendWidth = 180;
-  const legendHeight = (repoPoints.length + 1) * 22 + 10;
-  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="${legendWidth}" height="${legendHeight}" fill="${bgColor}" stroke="${borderColor}" stroke-width="1" rx="5"/>\n`;
+  // 图例（调整位置，避免溢出，按比例放大）
+  let legendX = padding.left + chartWidth + 15 * scale;
+  let legendY = padding.top + 20 * scale;
+  const legendWidth = 180 * scale;
+  const legendHeight = (repoPoints.length + 1) * 22 * scale + 10 * scale;
+  svg += `  <rect x="${legendX - 10 * scale}" y="${legendY - 15 * scale}" width="${legendWidth}" height="${legendHeight}" fill="${bgColor}" stroke="${borderColor}" stroke-width="${1 * scale}" rx="${5 * scale}"/>\n`;
   
-  // 总计图例
-  svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="#5470c6" stroke-width="3"/>\n`;
-  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" font-weight="bold" fill="${textColor}">总计</text>\n`;
-  legendY += 22;
+  // 总计图例（按比例放大）
+  svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20 * scale}" y2="${legendY}" stroke="#5470c6" stroke-width="${3 * scale}"/>\n`;
+  svg += `  <text x="${legendX + 25 * scale}" y="${legendY + 5 * scale}" font-size="${11 * scale}" font-weight="bold" fill="${textColor}">总计</text>\n`;
+  legendY += 22 * scale;
   
-  // 各仓库图例（缩短名称，避免溢出）
+  // 各仓库图例（缩短名称，避免溢出，按比例放大）
   repoPoints.forEach(repo => {
     const displayName = repo.name.length > 12 ? repo.name.substring(0, 12) + '...' : repo.name;
-    svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
-    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="10" fill="${textColor}">${displayName}</text>\n`;
-    legendY += 22;
+    svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20 * scale}" y2="${legendY}" stroke="${repo.color}" stroke-width="${2 * scale}" opacity="0.7"/>\n`;
+    svg += `  <text x="${legendX + 25 * scale}" y="${legendY + 5 * scale}" font-size="${10 * scale}" fill="${textColor}">${displayName}</text>\n`;
+    legendY += 22 * scale;
   });
   
   svg += `</svg>`;
@@ -881,10 +882,11 @@ function saveSVGAsPNG(svgString, filename, isDark = false) {
       candidateFontFiles.push(...linuxFonts.filter(f => fs.existsSync(f)));
     }
 
-    // 将 SVG 转换为 PNG
+    // 将 SVG 转换为 PNG（提高分辨率：SVG 已按 2 倍尺寸生成）
     const bgColor = isDark ? '#0d1117' : '#fffef0';
     const resvgOptions = {
       background: bgColor,
+      // SVG 尺寸已增加 2 倍，PNG 会自动按 SVG 尺寸渲染，获得更高分辨率
     };
 
     if (candidateFontFiles.length > 0) {
@@ -960,15 +962,10 @@ function generateStatsMarkdown(stats) {
     });
   }
 
-  // 生成使用时间统计（中文）
-  const usageHoursZh = Math.floor(usageTime.totalSeconds / 3600);
-  const usageMinutesZh = Math.floor((usageTime.totalSeconds % 3600) / 60);
-  const usageText = `总计 ${usageHoursZh} 小时 ${usageMinutesZh} 分钟`;
-  
-  // 生成使用时间统计（英文）
-  const usageHoursEn = Math.floor(usageTime.totalSeconds / 3600);
-  const usageMinutesEn = Math.floor((usageTime.totalSeconds % 3600) / 60);
-  const usageTextEn = `Total ${usageHoursEn} hours ${usageMinutesEn} minutes`;
+  // 生成使用时间统计
+  const usageHours = Math.floor(usageTime.totalSeconds / 3600);
+  const usageMinutes = Math.floor((usageTime.totalSeconds % 3600) / 60);
+  const usageText = `总计 ${usageHours} 小时 ${usageMinutes} 分钟`;
 
   // 生成 ECharts 图表代码块
   let echartsCharts = '';
@@ -989,12 +986,11 @@ function generateStatsMarkdown(stats) {
       const imagePathDark = saveSVGAsPNG(pieSVGDark, imageFilenameDark, true);
       
       if (imagePathLight && imagePathDark) {
-        echartsCharts += `
-📊 **编程语言占比**
+        echartsCharts += `📊 **编程语言占比**
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
-  <img src="${imagePathLight}" alt="编程语言占比">
+  <img src="${imagePathLight}" alt="编程语言占比" width="600">
 </picture>
 
 `;
@@ -1022,16 +1018,11 @@ function generateStatsMarkdown(stats) {
       const imagePathDark = saveSVGAsPNG(trendSVGDark, imageFilenameDark, true);
       
       if (imagePathLight && imagePathDark) {
-        echartsCharts += `<div lang="zh-CN">
-📈 **过去30天提交趋势**
-</div>
-<div lang="en" style="display: none;">
-📈 **Commit Trends (Past 30 Days)**
-</div>
+        echartsCharts += `📈 **过去30天提交趋势**
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
-  <img src="${imagePathLight}" alt="提交趋势图 / Commit Trends">
+  <img src="${imagePathLight}" alt="提交趋势图" width="1000">
 </picture>
 
 `;
@@ -1047,31 +1038,7 @@ function generateStatsMarkdown(stats) {
   // GitHub API 不提供个人资料主页访问统计，且仓库流量数据需要特殊权限
   // 访问统计已在模板中通过 visitor-badge 徽章显示
 
-  // 生成英文版语言统计文本
-  let languageTextEn = '';
-  if (languageEntries.length === 0) {
-    languageTextEn = '(No code activity in the past 7 days)\n';
-  } else {
-    const maxLangWidth = Math.max(...languageEntries.map(e => e.lang.length), 15);
-    const maxTimeWidth = 20;
-    
-    languageEntries.forEach(({ lang, bytes, commits: langCommits, additions, percentage }) => {
-      const timeRatio = totalBytes > 0 ? bytes / totalBytes : 0;
-      const langSeconds = Math.floor(usageTime.totalSeconds * timeRatio);
-      const hours = Math.floor(langSeconds / 3600);
-      const minutes = Math.floor((langSeconds % 3600) / 60);
-      const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-      const barLength = Math.floor(percentage / 2);
-      const bar = '█'.repeat(barLength) + '░'.repeat(50 - barLength);
-      languageTextEn += `${lang.padEnd(maxLangWidth)}\t${timeStr.padEnd(maxTimeWidth)}\t${bar}\t${percentage.toFixed(2)} %\n`;
-    });
-  }
-
-  // 英文版使用时间统计已在上面定义
-
-  return `<div lang="zh-CN">
-
-📊 **过去七天我的编程活动统计**
+  return `📊 **过去七天我的编程活动统计**
 
 \`\`\`
 💬 编程语言: 
@@ -1087,31 +1054,7 @@ ${usageText}
 \`\`\`
 
 ${echartsCharts}
-> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）
-
-</div>
-
-<div lang="en" style="display: none;">
-
-📊 **My Coding Activity (Past 7 Days)**
-
-\`\`\`
-💬 Programming Languages: 
-${languageTextEn.trim()}
-
-⏱️ Computer Usage Time: 
-${usageTextEn}
-
-📝 Code Statistics: 
-Total Lines of Code (LOC)      ${totalLOC.toLocaleString()} lines
-Commits                        ${commitCount} times
-Active Repositories            ${new Set(commits.map(c => c.repoFullName)).size} repos
-\`\`\`
-
-${echartsCharts}
-> ⏱️ Activity data inferred from GitHub events (no IDE plugins required)
-
-</div>`;
+> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
 }
 
 // 更新 README（基于模板）
