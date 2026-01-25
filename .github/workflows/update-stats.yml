@@ -49,6 +49,11 @@ jobs:
           git config --local user.name "GitHub Action"
           git add README.md
           git add images/ || true
-          git diff --staged --quiet || git commit -m "📊 更新本周编程活动统计 [skip ci]"
-          git push
+          if ! git diff --staged --quiet; then
+            git commit -m "📊 更新本周编程活动统计 [skip ci]"
+            git push
+            echo "✅ 已提交并推送更改"
+          else
+            echo "ℹ️ 没有变更需要提交"
+          fi
 

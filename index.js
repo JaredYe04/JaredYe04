@@ -1,6 +1,8 @@
 const { Octokit } = require('@octokit/rest');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const { Resvg } = require('@resvg/resvg-js');
 
 // 配置
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -779,6 +781,90 @@ function generateCommitTrendSVG(commits30Days) {
   return svg;
 }
 
+// 将 SVG 转换为 PNG 并保存
+function saveSVGAsPNG(svgString, filename) {
+  try {
+    const imagesDir = path.join(__dirname, 'images');
+    if (!fs.existsSync(imagesDir)) {
+      fs.mkdirSync(imagesDir, { recursive: true });
+    }
+
+    // 规范化 SVG，注入中文字体支持
+    let svg = svgString;
+    const hasChineseFont = /Microsoft YaHei|SimSun|SimHei|Noto|WenQuanYi|Noto Sans CJK/i.test(svg);
+    
+    if (!hasChineseFont) {
+      if (/<style[^>]*>/i.test(svg)) {
+        svg = svg.replace(
+          /(<style[^>]*>)([\s\S]*?)(<\/style>)/i,
+          (match, openTag, content, closeTag) => {
+            if (!/font-family/i.test(content)) {
+              return `${openTag}${content}\nsvg, text, tspan { font-family: Arial, "Microsoft YaHei", "SimSun", "SimHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", "WenQuanYi Zen Hei", "Segoe UI", Verdana, sans-serif; }${closeTag}`;
+            }
+            return match;
+          }
+        );
+      } else {
+        svg = svg.replace(
+          /(<svg[^>]*>)/i,
+          `$1<style>svg, text, tspan { font-family: Arial, "Microsoft YaHei", "SimSun", "SimHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", "WenQuanYi Zen Hei", "Segoe UI", Verdana, sans-serif; }</style>`
+        );
+      }
+    }
+
+    // 收集系统字体文件
+    const candidateFontFiles = [];
+    if (process.platform === 'win32') {
+      const windowsFonts = [
+        'C:/Windows/Fonts/arial.ttf',
+        'C:/Windows/Fonts/arialuni.ttf',
+        'C:/Windows/Fonts/msyh.ttc',
+        'C:/Windows/Fonts/simhei.ttf',
+        'C:/Windows/Fonts/simsun.ttc',
+        'C:/Windows/Fonts/segoeui.ttf',
+      ];
+      candidateFontFiles.push(...windowsFonts.filter(f => fs.existsSync(f)));
+    } else {
+      const linuxFonts = [
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf',
+        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+        '/usr/share/fonts/truetype/wqy/wqy-microhei.ttc',
+        '/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc',
+        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.otf',
+      ];
+      candidateFontFiles.push(...linuxFonts.filter(f => fs.existsSync(f)));
+    }
+
+    // 将 SVG 转换为 PNG
+    const resvgOptions = {
+      background: '#fffef0', // 护眼黄白色背景
+    };
+
+    if (candidateFontFiles.length > 0) {
+      resvgOptions.font = {
+        loadSystemFonts: true,
+        fontFiles: candidateFontFiles,
+        defaultFontFamily: 'Arial',
+      };
+    }
+
+    const resvg = new Resvg(svg, resvgOptions);
+    const pngData = resvg.render();
+    const pngBuffer = pngData.asPng();
+
+    // 保存 PNG 文件
+    const imagePath = path.join(imagesDir, filename);
+    fs.writeFileSync(imagePath, pngBuffer);
+    
+    console.log(`✅ SVG 已转换为 PNG: ${filename} (${(pngBuffer.length / 1024).toFixed(2)} KB)`);
+    return `images/${filename}`;
+  } catch (error) {
+    console.error('❌ SVG 转 PNG 失败:', error.message);
+    return null;
+  }
+}
+
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
   const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
@@ -853,16 +939,25 @@ ${pieChart}
     }
   }
 
-  // 提交趋势图（使用 SVG）
+  // 提交趋势图（使用 SVG 转 PNG）
   if (commits30Days && commits30Days.length > 0) {
     try {
-      const trendChart = generateCommitTrendSVG(commits30Days);
-      echartsCharts += `
+      const trendSVG = generateCommitTrendSVG(commits30Days);
+      // 生成文件名（基于内容哈希）
+      const hash = crypto.createHash('sha256').update(trendSVG).digest('hex').slice(0, 12);
+      const imageFilename = `commit-trend-${hash}.png`;
+      const imagePath = saveSVGAsPNG(trendSVG, imageFilename);
+      
+      if (imagePath) {
+        echartsCharts += `
 📈 **过去30天提交趋势**
 
-${trendChart}
+![提交趋势图](${imagePath})
 
 `;
+      } else {
+        console.warn('提交趋势图 PNG 保存失败，跳过');
+      }
     } catch (error) {
       console.warn('生成提交趋势图表失败:', error.message);
     }
