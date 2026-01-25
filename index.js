@@ -45,7 +45,7 @@ const languageNames = {
   'Dockerfile': 'Dockerfile',
   'CMake': 'CMake',
   'Makefile': 'Makefile',
-  'Other': '其他',
+  'Other': 'Other',
 };
 
 // 获取本周的开始时间（周一 00:00 UTC+8）
@@ -503,6 +503,229 @@ function generateCommitChart(commits30Days) {
   return chart;
 }
 
+// 生成编程语言占比 ECharts 饼图配置
+function generateLanguagePieChart(languageStats, usageTime) {
+  const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
+  const languageEntries = Object.entries(languageStats)
+    .map(([lang, stat]) => ({
+      lang: languageNames[lang] || lang,
+      originalLang: lang,
+      bytes: stat.bytes,
+      percentage: totalBytes > 0 ? (stat.bytes / totalBytes) * 100 : 0,
+    }))
+    .filter(item => item.bytes > 0)
+    .sort((a, b) => b.bytes - a.bytes)
+    .slice(0, 10);
+
+  const data = languageEntries.map(({ lang, bytes, percentage }) => ({
+    value: bytes,
+    name: lang,
+  }));
+
+  const option = {
+    title: {
+      text: '编程语言占比',
+      left: 'center',
+      textStyle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} bytes ({d}%)',
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      top: 'middle',
+    },
+    series: [
+      {
+        name: '编程语言',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2,
+        },
+        label: {
+          show: true,
+          formatter: '{b}\n{d}%',
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
+        },
+        data: data,
+      },
+    ],
+    width: 800,
+    height: 600,
+  };
+
+  return JSON.stringify(option, null, 2);
+}
+
+// 生成提交趋势 ECharts 折线图配置
+function generateCommitTrendChart(commits30Days) {
+  // 初始化过去30天的数据
+  const daysData = [];
+  const now = new Date();
+  
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(now.getDate() - i);
+    date.setHours(0, 0, 0, 0);
+    const dateStr = date.toISOString().split('T')[0];
+    daysData.push({
+      date: date,
+      dateStr: dateStr,
+      count: 0,
+      repos: {},
+    });
+  }
+
+  // 统计每天的提交数和各仓库的提交数
+  commits30Days.forEach(commit => {
+    const commitDate = new Date(commit.commit.author.date);
+    const commitDateStr = commitDate.toISOString().split('T')[0];
+    const dayData = daysData.find(d => d.dateStr === commitDateStr);
+    if (dayData) {
+      dayData.count++;
+      const repoName = commit.repoFullName || commit.repo || 'unknown';
+      if (!dayData.repos[repoName]) {
+        dayData.repos[repoName] = 0;
+      }
+      dayData.repos[repoName]++;
+    }
+  });
+
+  // 获取所有仓库名称（按提交数排序，取前10个）
+  const repoStats = {};
+  daysData.forEach(day => {
+    Object.entries(day.repos).forEach(([repo, count]) => {
+      if (!repoStats[repo]) {
+        repoStats[repo] = 0;
+      }
+      repoStats[repo] += count;
+    });
+  });
+
+  const topRepos = Object.entries(repoStats)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([repo]) => repo);
+
+  // 生成日期标签
+  const dates = daysData.map(d => {
+    const month = d.date.getMonth() + 1;
+    const day = d.date.getDate();
+    return `${month}/${day}`;
+  });
+
+  // 生成总提交数数据
+  const totalData = daysData.map(d => d.count);
+
+  // 生成各仓库的提交数据
+  const repoSeries = topRepos.map(repo => ({
+    name: repo.split('/').pop(), // 只显示仓库名
+    type: 'line',
+    smooth: true,
+    symbol: 'circle',
+    symbolSize: 6,
+    data: daysData.map(day => day.repos[repo] || 0),
+    lineStyle: {
+      width: 2,
+    },
+  }));
+
+  const option = {
+    title: {
+      text: '过去30天提交趋势',
+      left: 'center',
+      textStyle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+      },
+    },
+    legend: {
+      data: ['总计', ...topRepos.map(r => r.split('/').pop())],
+      top: 40,
+      type: 'scroll',
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '15%',
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: dates,
+      axisLabel: {
+        rotate: 45,
+        interval: 2, // 每2个显示一个标签
+      },
+    },
+    yAxis: {
+      type: 'value',
+      name: '提交次数',
+    },
+    series: [
+      {
+        name: '总计',
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 8,
+        lineStyle: {
+          width: 3,
+          color: '#5470c6',
+        },
+        itemStyle: {
+          color: '#5470c6',
+        },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(84, 112, 198, 0.3)' },
+              { offset: 1, color: 'rgba(84, 112, 198, 0.1)' },
+            ],
+          },
+        },
+        data: totalData,
+        emphasis: {
+          focus: 'series',
+        },
+      },
+      ...repoSeries,
+    ],
+    width: 1200,
+    height: 600,
+  };
+
+  return JSON.stringify(option, null, 2);
+}
+
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
   const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
@@ -512,12 +735,22 @@ function generateStatsMarkdown(stats) {
   const languageEntries = Object.entries(languageStats)
     .map(([lang, stat]) => ({
       lang: languageNames[lang] || lang,
+      originalLang: lang,
       bytes: stat.bytes,
       commits: stat.commits,
       additions: stat.additions || 0,
       percentage: totalBytes > 0 ? (stat.bytes / totalBytes) * 100 : 0,
     }))
-    .sort((a, b) => b.bytes - a.bytes)
+    .sort((a, b) => {
+      // 按首字母排序（不区分大小写）
+      const aName = a.lang.toUpperCase();
+      const bName = b.lang.toUpperCase();
+      if (aName !== bName) {
+        return aName.localeCompare(bName);
+      }
+      // 如果首字母相同，按字节数降序
+      return b.bytes - a.bytes;
+    })
     .slice(0, 10); // 只显示前 10 种语言
 
   // 生成语言统计文本
@@ -525,6 +758,10 @@ function generateStatsMarkdown(stats) {
   if (languageEntries.length === 0) {
     languageText = '（本周暂无代码活动）\n';
   } else {
+    // 计算最大宽度以便对齐
+    const maxLangWidth = Math.max(...languageEntries.map(e => e.lang.length), 15);
+    const maxTimeWidth = 20; // 时间字符串最大宽度
+    
     languageEntries.forEach(({ lang, bytes, commits: langCommits, additions, percentage }) => {
       // 基于使用时间和语言占比计算时间
       const timeRatio = totalBytes > 0 ? bytes / totalBytes : 0;
@@ -534,7 +771,8 @@ function generateStatsMarkdown(stats) {
       const timeStr = hours > 0 ? `${hours} 小时 ${minutes} 分钟` : `${minutes} 分钟`;
       const barLength = Math.floor(percentage / 2); // 50 个字符为 100%
       const bar = '█'.repeat(barLength) + '░'.repeat(50 - barLength);
-      languageText += `${lang.padEnd(20)} ${timeStr.padEnd(15)} ${bar} ${percentage.toFixed(2)} %\n`;
+      // 使用制表符对齐
+      languageText += `${lang.padEnd(maxLangWidth)}\t${timeStr.padEnd(maxTimeWidth)}\t${bar}\t${percentage.toFixed(2)} %\n`;
     });
   }
 
@@ -543,17 +781,41 @@ function generateStatsMarkdown(stats) {
   const usageMinutes = Math.floor((usageTime.totalSeconds % 3600) / 60);
   const usageText = `总计 ${usageHours} 小时 ${usageMinutes} 分钟`;
 
-  // 生成过去30天的提交图表
-  let chartSection = '';
+  // 生成 ECharts 图表代码块
+  let echartsCharts = '';
+  
+  // 编程语言占比饼图
+  if (Object.keys(languageStats).length > 0 && totalBytes > 0) {
+    try {
+      const pieChart = generateLanguagePieChart(languageStats, usageTime);
+      echartsCharts += `
+📊 **编程语言占比**
+
+\`\`\`echarts
+${pieChart}
+\`\`\`
+
+`;
+    } catch (error) {
+      console.warn('生成语言占比图表失败:', error.message);
+    }
+  }
+
+  // 提交趋势折线图
   if (commits30Days && commits30Days.length > 0) {
-    const chart = generateCommitChart(commits30Days);
-    chartSection = `
+    try {
+      const trendChart = generateCommitTrendChart(commits30Days);
+      echartsCharts += `
 📈 **过去30天提交趋势**
 
+\`\`\`echarts
+${trendChart}
 \`\`\`
-${chart}
-\`\`\`
+
 `;
+    } catch (error) {
+      console.warn('生成提交趋势图表失败:', error.message);
+    }
   }
 
   return `📊 **本周我的编程活动统计**
@@ -570,7 +832,8 @@ ${usageText}
 提交次数               ${commitCount} 次
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
 \`\`\`
-${chartSection}
+
+${echartsCharts}
 > ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
 }
 

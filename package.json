@@ -15,7 +15,9 @@
   "author": "JaredYe04",
   "license": "MIT",
   "dependencies": {
-    "@octokit/rest": "^20.0.2"
+    "@octokit/rest": "^20.0.2",
+    "echarts": "^5.6.0",
+    "@resvg/resvg-js": "^2.6.2"
   }
 }
 
