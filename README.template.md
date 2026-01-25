@@ -5,7 +5,7 @@
 欢迎来到我的世界。
 这里没有终点，只有不断逼近的答案。
 
-我用代码书写思考，用系统回应复杂，
+我用代码书写思考，用重构回应混乱，
 在技术与创造之间，寻找前进的方向。
 
 这是 JaredYe's World ——
@@ -24,7 +24,7 @@
 Welcome to my world.
 There is no end, only answers that keep approaching.
 
-I write thoughts with code, respond to complexity with systems,
+I write thoughts with code, respond to chaos with refactors,
 seeking the way forward between technology and creation.
 
 This is JaredYe's World ——
