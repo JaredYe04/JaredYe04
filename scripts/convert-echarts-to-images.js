@@ -193,27 +193,77 @@ async function convertEChartsToImages(markdownPath, imagesDir = 'images') {
       const pngData = resvg.render();
       const pngBuffer = pngData.asPng();
       
-      // 生成文件名（基于内容哈希）
+      // 判断是深色还是浅色模式（基于 backgroundColor）
+      const isDark = option.backgroundColor && (
+        option.backgroundColor === '#0d1117' || 
+        option.backgroundColor === '#161b22' ||
+        (typeof option.backgroundColor === 'string' && option.backgroundColor.toLowerCase().includes('dark'))
+      );
+      const themeSuffix = isDark ? 'dark' : 'light';
+      
+      // 生成文件名（基于内容哈希和主题）
       const hash = crypto.createHash('sha256').update(optionJson).digest('hex').slice(0, 12);
-      const imageFileName = `chart-${chartIndex}-${hash}.png`;
+      const imageFileName = `chart-${chartIndex}-${themeSuffix}-${hash}.png`;
       const imagePath = path.join(imagesPath, imageFileName);
       
       // 保存 PNG 文件
       fs.writeFileSync(imagePath, pngBuffer);
-      console.log(`✅ 图表 ${chartIndex} 已保存: ${imageFileName} (${(pngBuffer.length / 1024).toFixed(2)} KB)`);
+      console.log(`✅ 图表 ${chartIndex} (${themeSuffix}) 已保存: ${imageFileName} (${(pngBuffer.length / 1024).toFixed(2)} KB)`);
       
       // 计算相对路径（用于 Markdown 中的图片引用）
       const relativeImagePath = path.relative(markdownDir, imagePath).replace(/\\/g, '/');
       
-      // 替换代码块为图片引用
-      const imageMarkdown = `![ECharts 图表 ${chartIndex}](${relativeImagePath})`;
-      convertedContent = convertedContent.replace(fullMatch, imageMarkdown);
+      // 替换代码块为临时标记（稍后处理配对）
+      const tempMarkdown = `<!--ECHARTS_TEMP_${chartIndex}_${themeSuffix}:${relativeImagePath}-->`;
+      convertedContent = convertedContent.replace(fullMatch, tempMarkdown);
+      
+      // 存储配对信息（使用全局变量）
+      if (!global.chartPairs) {
+        global.chartPairs = {};
+      }
+      if (!global.chartPairs[chartIndex]) {
+        global.chartPairs[chartIndex] = {};
+      }
+      global.chartPairs[chartIndex][themeSuffix] = relativeImagePath;
       
     } catch (error) {
       console.error(`❌ 处理图表 ${chartIndex} 时出错:`, error.message);
       // 如果转换失败，保留原始代码块
       continue;
     }
+  }
+  
+  // 处理配对的浅色/深色图表，合并为 picture 标签
+  if (global.chartPairs) {
+    Object.keys(global.chartPairs).forEach(chartNum => {
+      const pair = global.chartPairs[chartNum];
+      if (pair.light && pair.dark) {
+        // 找到配对，使用 picture 标签
+        const lightPattern = `<!--ECHARTS_TEMP_${chartNum}_light:${pair.light}-->`;
+        const darkPattern = `<!--ECHARTS_TEMP_${chartNum}_dark:${pair.dark}-->`;
+        
+        // 处理两种可能的顺序
+        const pattern1 = new RegExp(lightPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\s\\S]*?' + darkPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        const pattern2 = new RegExp(darkPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[\\s\\S]*?' + lightPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        
+        const pictureMarkdown = `<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="${pair.dark}">
+  <img src="${pair.light}" alt="ECharts 图表 ${chartNum}">
+</picture>`;
+        
+        convertedContent = convertedContent.replace(pattern1, pictureMarkdown);
+        convertedContent = convertedContent.replace(pattern2, pictureMarkdown);
+      } else {
+        // 未配对的，使用普通图片标签
+        const theme = pair.light ? 'light' : 'dark';
+        const imagePath = pair[theme];
+        const pattern = `<!--ECHARTS_TEMP_${chartNum}_${theme}:${imagePath}-->`;
+        const imageMarkdown = `![ECharts 图表 ${chartNum}](${imagePath})`;
+        convertedContent = convertedContent.replace(pattern, imageMarkdown);
+      }
+    });
+    // 清理全局变量
+    global.chartPairs = {};
   }
   
   return convertedContent;

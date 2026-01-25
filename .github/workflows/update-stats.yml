@@ -5,6 +5,9 @@ on:
     # 每半小时运行一次
     - cron: '*/30 * * * *'
   workflow_dispatch: # 允许手动触发
+  push:
+    branches:
+      - main
 
 jobs:
   update-stats:

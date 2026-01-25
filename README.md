@@ -142,7 +142,10 @@
 
 > ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）
 
-![Snake animation](https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake-dark.svg">
+  <img src="https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg" alt="Snake animation">
+</picture>
 
 
 

@@ -50,16 +50,14 @@ const languageNames = {
   'Other': 'Other',
 };
 
-// 获取本周的开始时间（周一 00:00 UTC+8）
-function getWeekStart() {
+// 获取过去7天的开始时间（UTC+8）
+function getLast7DaysStart() {
   const now = new Date();
   const beijingTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
-  const day = beijingTime.getDay();
-  const diff = day === 0 ? 6 : day - 1; // 周一为 0
-  const weekStart = new Date(beijingTime);
-  weekStart.setDate(beijingTime.getDate() - diff);
-  weekStart.setHours(0, 0, 0, 0);
-  return weekStart.toISOString();
+  const startDate = new Date(beijingTime);
+  startDate.setDate(beijingTime.getDate() - 7);
+  startDate.setHours(0, 0, 0, 0);
+  return startDate.toISOString();
 }
 
 // 获取过去N天的开始时间（UTC+8）
@@ -95,6 +93,36 @@ function formatDurationShort(seconds) {
 // 计算时间差（秒）
 function getTimeDiff(start, end) {
   return Math.max(0, Math.floor((new Date(end) - new Date(start)) / 1000));
+}
+
+// 获取仓库的访问统计
+async function getRepoViews() {
+  try {
+    // 尝试获取仓库的 views 统计（需要仓库有访问权限）
+    const { data } = await octokit.repos.getViews({
+      owner: REPO_OWNER,
+      repo: REPO_NAME,
+      per: 'day',
+    });
+    
+    // 计算总访问量
+    const totalViews = data.views.reduce((sum, view) => sum + view.count, 0);
+    const uniqueViews = data.views.reduce((sum, view) => sum + view.uniques, 0);
+    
+    return {
+      total: totalViews,
+      unique: uniqueViews,
+      lastUpdated: new Date().toISOString(),
+    };
+  } catch (error) {
+    // 如果无法获取，返回默认值
+    console.warn('获取仓库访问统计失败:', error.message);
+    return {
+      total: 0,
+      unique: 0,
+      lastUpdated: new Date().toISOString(),
+    };
+  }
 }
 
 // 获取用户的所有仓库
@@ -197,10 +225,10 @@ async function getCommitsSince(sinceDate, label = 'commits') {
   return commits;
 }
 
-// 获取本周的 commits
-async function getWeeklyCommits() {
-  const weekStart = getWeekStart();
-  return await getCommitsSince(weekStart, '本周 commits');
+// 获取过去7天的 commits
+async function getLast7DaysCommits() {
+  const last7DaysStart = getLast7DaysStart();
+  return await getCommitsSince(last7DaysStart, '过去7天 commits');
 }
 
 // 获取 commit 的文件变更信息
@@ -506,7 +534,7 @@ function generateCommitChart(commits30Days) {
 }
 
 // 生成编程语言占比 ECharts 饼图配置
-function generateLanguagePieChart(languageStats, usageTime) {
+function generateLanguagePieChart(languageStats, usageTime, isDark = false) {
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
   const languageEntries = Object.entries(languageStats)
     .map(([lang, stat]) => ({
@@ -524,23 +552,37 @@ function generateLanguagePieChart(languageStats, usageTime) {
     name: lang,
   }));
 
+  const bgColor = isDark ? '#0d1117' : '#fffef0';
+  const textColor = isDark ? '#c9d1d9' : '#333';
+  const borderColor = isDark ? '#30363d' : '#fff';
+
   const option = {
+    backgroundColor: bgColor,
     title: {
       text: '编程语言占比',
       left: 'center',
       textStyle: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: textColor,
       },
     },
     tooltip: {
       trigger: 'item',
       formatter: '{b}: {c} bytes ({d}%)',
+      backgroundColor: isDark ? '#161b22' : '#fff',
+      borderColor: isDark ? '#30363d' : '#ddd',
+      textStyle: {
+        color: textColor,
+      },
     },
     legend: {
       orient: 'vertical',
       left: 'left',
       top: 'middle',
+      textStyle: {
+        color: textColor,
+      },
     },
     series: [
       {
@@ -550,18 +592,20 @@ function generateLanguagePieChart(languageStats, usageTime) {
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 10,
-          borderColor: '#fff',
+          borderColor: borderColor,
           borderWidth: 2,
         },
         label: {
           show: true,
           formatter: '{b}\n{d}%',
+          color: textColor,
         },
         emphasis: {
           label: {
             show: true,
             fontSize: 16,
             fontWeight: 'bold',
+            color: textColor,
           },
         },
         data: data,
@@ -575,7 +619,7 @@ function generateLanguagePieChart(languageStats, usageTime) {
 }
 
 // 生成提交趋势 SVG 折线图
-function generateCommitTrendSVG(commits30Days) {
+function generateCommitTrendSVG(commits30Days, isDark = false) {
   // 初始化过去30天的数据
   const daysData = [];
   const now = new Date();
@@ -706,25 +750,32 @@ function generateCommitTrendSVG(commits30Days) {
     color: colors[repoIdx + 1] || colors[repoIdx % colors.length],
   }));
 
+  // 深色模式颜色
+  const bgColor = isDark ? '#0d1117' : '#fffef0';
+  const textColor = isDark ? '#c9d1d9' : '#333';
+  const gridColor = isDark ? '#21262d' : '#e8e6d9';
+  const borderColor = isDark ? '#30363d' : '#d0cec0';
+  const textColorSecondary = isDark ? '#8b949e' : '#555';
+  
   // 生成 SVG
   let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">\n`;
   
-  // 背景（黄白色护眼）
-  svg += `  <rect width="${width}" height="${height}" fill="#fffef0"/>\n`;
+  // 背景
+  svg += `  <rect width="${width}" height="${height}" fill="${bgColor}"/>\n`;
   
   // 标题
-  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">过去30天提交趋势</text>\n`;
+  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="${textColor}">过去30天提交趋势</text>\n`;
   
   // 网格线
   for (let i = 0; i <= 5; i++) {
     const y = padding.top + (chartHeight / 5) * i;
     const value = Math.round(maxCount - (maxCount / 5) * i);
-    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="#e8e6d9" stroke-width="1" stroke-dasharray="2,2"/>\n`;
-    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" font-weight="bold" fill="#555">${value}</text>\n`;
+    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="${gridColor}" stroke-width="1" stroke-dasharray="2,2"/>\n`;
+    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" font-weight="bold" fill="${textColorSecondary}">${value}</text>\n`;
   }
   
   // Y轴标签（加粗）
-  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="#555" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
+  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
   
   // 总面积填充（总计）
   svg += `  <path d="${generateAreaPath(totalPoints, padding.top + chartHeight)}" fill="rgba(84, 112, 198, 0.1)" stroke="none"/>\n`;
@@ -752,7 +803,7 @@ function generateCommitTrendSVG(commits30Days) {
   dates.forEach((date, i) => {
     if (i % 5 === 0 || i === dates.length - 1) {
       const x = padding.left + (i / (dates.length - 1)) * chartWidth;
-      svg += `  <text x="${x}" y="${height - padding.bottom + 15}" text-anchor="middle" font-size="10" font-weight="bold" fill="#555" transform="rotate(-30, ${x}, ${height - padding.bottom + 15})">${date}</text>\n`;
+      svg += `  <text x="${x}" y="${height - padding.bottom + 15}" text-anchor="middle" font-size="10" font-weight="bold" fill="${textColorSecondary}" transform="rotate(-30, ${x}, ${height - padding.bottom + 15})">${date}</text>\n`;
     }
   });
   
@@ -761,18 +812,18 @@ function generateCommitTrendSVG(commits30Days) {
   let legendY = padding.top + 20;
   const legendWidth = 180;
   const legendHeight = (repoPoints.length + 1) * 22 + 10;
-  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="${legendWidth}" height="${legendHeight}" fill="#fffef0" stroke="#d0cec0" stroke-width="1" rx="5"/>\n`;
+  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="${legendWidth}" height="${legendHeight}" fill="${bgColor}" stroke="${borderColor}" stroke-width="1" rx="5"/>\n`;
   
   // 总计图例
   svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="#5470c6" stroke-width="3"/>\n`;
-  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" font-weight="bold" fill="#333">总计</text>\n`;
+  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" font-weight="bold" fill="${textColor}">总计</text>\n`;
   legendY += 22;
   
   // 各仓库图例（缩短名称，避免溢出）
   repoPoints.forEach(repo => {
     const displayName = repo.name.length > 12 ? repo.name.substring(0, 12) + '...' : repo.name;
     svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
-    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="10" fill="#333">${displayName}</text>\n`;
+    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="10" fill="${textColor}">${displayName}</text>\n`;
     legendY += 22;
   });
   
@@ -782,7 +833,7 @@ function generateCommitTrendSVG(commits30Days) {
 }
 
 // 将 SVG 转换为 PNG 并保存
-function saveSVGAsPNG(svgString, filename) {
+function saveSVGAsPNG(svgString, filename, isDark = false) {
   try {
     const imagesDir = path.join(__dirname, 'images');
     if (!fs.existsSync(imagesDir)) {
@@ -837,8 +888,9 @@ function saveSVGAsPNG(svgString, filename) {
     }
 
     // 将 SVG 转换为 PNG
+    const bgColor = isDark ? '#0d1117' : '#fffef0';
     const resvgOptions = {
-      background: '#fffef0', // 护眼黄白色背景
+      background: bgColor,
     };
 
     if (candidateFontFiles.length > 0) {
@@ -867,7 +919,7 @@ function saveSVGAsPNG(svgString, filename) {
 
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
-  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
+  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days, repoViews } = stats;
 
   // 计算语言占比
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
@@ -894,7 +946,7 @@ function generateStatsMarkdown(stats) {
   // 生成语言统计文本
   let languageText = '';
   if (languageEntries.length === 0) {
-    languageText = '（本周暂无代码活动）\n';
+    languageText = '（过去七天暂无代码活动）\n';
   } else {
     // 计算最大宽度以便对齐
     const maxLangWidth = Math.max(...languageEntries.map(e => e.lang.length), 15);
@@ -922,15 +974,21 @@ function generateStatsMarkdown(stats) {
   // 生成 ECharts 图表代码块
   let echartsCharts = '';
   
-  // 编程语言占比饼图
+  // 编程语言占比饼图（生成浅色和深色两个版本）
   if (Object.keys(languageStats).length > 0 && totalBytes > 0) {
     try {
-      const pieChart = generateLanguagePieChart(languageStats, usageTime);
+      const pieChartLight = generateLanguagePieChart(languageStats, usageTime, false);
+      const pieChartDark = generateLanguagePieChart(languageStats, usageTime, true);
       echartsCharts += `
 📊 **编程语言占比**
 
 \`\`\`echarts
-${pieChart}
+${pieChartLight}
+\`\`\`
+
+<!-- 深色模式版本 -->
+\`\`\`echarts
+${pieChartDark}
 \`\`\`
 
 `;
@@ -939,20 +997,29 @@ ${pieChart}
     }
   }
 
-  // 提交趋势图（使用 SVG 转 PNG）
+  // 提交趋势图（使用 SVG 转 PNG，生成浅色和深色两个版本）
   if (commits30Days && commits30Days.length > 0) {
     try {
-      const trendSVG = generateCommitTrendSVG(commits30Days);
-      // 生成文件名（基于内容哈希）
-      const hash = crypto.createHash('sha256').update(trendSVG).digest('hex').slice(0, 12);
-      const imageFilename = `commit-trend-${hash}.png`;
-      const imagePath = saveSVGAsPNG(trendSVG, imageFilename);
+      const trendSVGLight = generateCommitTrendSVG(commits30Days, false);
+      const trendSVGDark = generateCommitTrendSVG(commits30Days, true);
       
-      if (imagePath) {
+      // 生成文件名（基于内容哈希）
+      const hashLight = crypto.createHash('sha256').update(trendSVGLight).digest('hex').slice(0, 12);
+      const hashDark = crypto.createHash('sha256').update(trendSVGDark).digest('hex').slice(0, 12);
+      const imageFilenameLight = `commit-trend-light-${hashLight}.png`;
+      const imageFilenameDark = `commit-trend-dark-${hashDark}.png`;
+      
+      const imagePathLight = saveSVGAsPNG(trendSVGLight, imageFilenameLight, false);
+      const imagePathDark = saveSVGAsPNG(trendSVGDark, imageFilenameDark, true);
+      
+      if (imagePathLight && imagePathDark) {
         echartsCharts += `
 📈 **过去30天提交趋势**
 
-![提交趋势图](${imagePath})
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
+  <img src="${imagePathLight}" alt="提交趋势图">
+</picture>
 
 `;
       } else {
@@ -963,7 +1030,12 @@ ${pieChart}
     }
   }
 
-  return `📊 **本周我的编程活动统计**
+  // 访问统计
+  const viewsText = repoViews && repoViews.total > 0 
+    ? `👁️ 主页访问: 总计 ${repoViews.total.toLocaleString()} 次 | 独立访问 ${repoViews.unique.toLocaleString()} 次`
+    : '👁️ 主页访问: 统计中...';
+
+  return `📊 **过去七天我的编程活动统计**
 
 \`\`\`
 💬 编程语言: 
@@ -976,6 +1048,8 @@ ${usageText}
 总代码行数 (LOC)      ${totalLOC.toLocaleString()} 行
 提交次数               ${commitCount} 次
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
+
+${viewsText}
 \`\`\`
 
 ${echartsCharts}
@@ -988,7 +1062,7 @@ async function updateREADME(statsMarkdown) {
   let readmeContent = fs.readFileSync(readmePath, 'utf-8');
 
   // 查找并替换统计部分
-  const statsStartMarker = '📊 **本周我的编程活动统计**';
+  const statsStartMarker = '📊 **过去七天我的编程活动统计**';
   const statsEndMarker = '> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）';
 
   const startIndex = readmeContent.indexOf(statsStartMarker);
@@ -1039,8 +1113,8 @@ async function updateREADME(statsMarkdown) {
 async function main() {
   console.log('🚀 开始统计 GitHub 活动数据...');
   console.log(`📌 用户: ${GITHUB_USERNAME}`);
-  const weekStart = getWeekStart();
-  console.log(`📅 统计周期: 本周（从 ${weekStart} 开始）\n`);
+  const last7DaysStart = getLast7DaysStart();
+  console.log(`📅 统计周期: 过去七天（从 ${last7DaysStart} 开始）\n`);
 
   try {
     // 获取过去30天的 commits（用于图表）
@@ -1049,13 +1123,18 @@ async function main() {
     const commits30Days = await getCommitsSince(days30Start, '过去30天 commits');
     console.log(`✅ 找到 ${commits30Days.length} 个 commits（30天）\n`);
 
-    // 获取本周 commits
-    console.log('📦 获取本周 commits...');
-    const commits = await getWeeklyCommits();
-    console.log(`✅ 找到 ${commits.length} 个 commits（本周）\n`);
+    // 获取过去7天的 commits
+    console.log('📦 获取过去7天的 commits...');
+    const commits = await getLast7DaysCommits();
+    console.log(`✅ 找到 ${commits.length} 个 commits（过去7天）\n`);
+
+    // 获取仓库访问统计
+    console.log('👁️ 获取仓库访问统计...');
+    const repoViews = await getRepoViews();
+    console.log(`✅ 总访问量: ${repoViews.total} 次，独立访问: ${repoViews.unique} 次\n`);
 
     if (commits.length === 0) {
-      console.log('⚠️ 本周暂无 commits，使用空数据');
+      console.log('⚠️ 过去七天暂无 commits，使用空数据');
       const emptyStats = {
         languageStats: {},
         totalLOC: 0,
@@ -1063,6 +1142,7 @@ async function main() {
         usageTime: { totalSeconds: 0, sessions: [] },
         commits: [],
         commits30Days: commits30Days,
+        repoViews: repoViews,
       };
       const statsMarkdown = generateStatsMarkdown(emptyStats);
       await updateREADME(statsMarkdown);
@@ -1090,6 +1170,7 @@ async function main() {
       usageTime,
       commits,
       commits30Days,
+      repoViews,
     };
 
     console.log('📝 生成统计报告...');
@@ -1097,7 +1178,7 @@ async function main() {
     await updateREADME(statsMarkdown);
 
     console.log('\n✨ 统计完成！');
-    console.log(`   - 提交次数（本周）: ${commits.length}`);
+    console.log(`   - 提交次数（过去7天）: ${commits.length}`);
     console.log(`   - 提交次数（30天）: ${commits30Days.length}`);
     console.log(`   - 代码行数: ${totalLOC.toLocaleString()} LOC`);
     console.log(`   - 使用时间: ${formatDuration(usageTime.totalSeconds)}`);
