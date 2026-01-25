@@ -95,17 +95,20 @@ function getTimeDiff(start, end) {
   return Math.max(0, Math.floor((new Date(end) - new Date(start)) / 1000));
 }
 
-// 获取仓库的访问统计
-async function getRepoViews() {
+// 获取 GitHub 个人资料主页的访问统计
+// 注意：GitHub API 不提供个人资料主页的访问统计
+// 这里使用仓库访问统计作为参考指标
+// 如需精确的个人资料主页访问统计，建议使用第三方服务（如 visitor-badge.glitch.me）
+async function getProfileViews() {
   try {
-    // 尝试获取仓库的 views 统计（需要仓库有访问权限）
+    // 使用仓库访问统计作为参考（虽然不是个人资料主页，但可以作为指标）
     const { data } = await octokit.repos.getViews({
       owner: REPO_OWNER,
       repo: REPO_NAME,
       per: 'day',
     });
     
-    // 计算总访问量
+    // 计算总访问量（过去14天的数据）
     const totalViews = data.views.reduce((sum, view) => sum + view.count, 0);
     const uniqueViews = data.views.reduce((sum, view) => sum + view.uniques, 0);
     
@@ -116,7 +119,8 @@ async function getRepoViews() {
     };
   } catch (error) {
     // 如果无法获取，返回默认值
-    console.warn('获取仓库访问统计失败:', error.message);
+    console.warn('获取访问统计失败:', error.message);
+    console.warn('提示: GitHub API 不提供个人资料主页的访问统计，这里使用仓库访问统计作为参考');
     return {
       total: 0,
       unique: 0,
@@ -919,7 +923,7 @@ function saveSVGAsPNG(svgString, filename, isDark = false) {
 
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
-  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days, repoViews } = stats;
+  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days, profileViews } = stats;
 
   // 计算语言占比
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
@@ -1030,10 +1034,10 @@ ${pieChartDark}
     }
   }
 
-  // 访问统计
-  const viewsText = repoViews && repoViews.total > 0 
-    ? `👁️ 主页访问: 总计 ${repoViews.total.toLocaleString()} 次 | 独立访问 ${repoViews.unique.toLocaleString()} 次`
-    : '👁️ 主页访问: 统计中...';
+  // 访问统计（使用 visitor-badge 服务，这里显示仓库访问统计作为参考）
+  const viewsText = profileViews && profileViews.total > 0 
+    ? `👁️ 仓库访问: 总计 ${profileViews.total.toLocaleString()} 次 | 独立访问 ${profileViews.unique.toLocaleString()} 次（个人资料主页访问统计见下方徽章）`
+    : '👁️ 仓库访问: 统计中...（个人资料主页访问统计见下方徽章）';
 
   return `📊 **过去七天我的编程活动统计**
 
@@ -1056,57 +1060,25 @@ ${echartsCharts}
 > ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
 }
 
-// 更新 README
+// 更新 README（基于模板）
 async function updateREADME(statsMarkdown) {
+  const templatePath = path.join(__dirname, 'README.template.md');
   const readmePath = path.join(__dirname, 'README.md');
-  let readmeContent = fs.readFileSync(readmePath, 'utf-8');
-
-  // 查找并替换统计部分
-  const statsStartMarker = '📊 **过去七天我的编程活动统计**';
-  const statsEndMarker = '> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）';
-
-  const startIndex = readmeContent.indexOf(statsStartMarker);
-  const endIndex = readmeContent.indexOf(statsEndMarker);
-
-  if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
-    // 替换现有统计（包括结束标记后的换行）
-    const before = readmeContent.substring(0, startIndex);
-    // 找到结束标记后的第一个换行
-    let afterStart = endIndex + statsEndMarker.length;
-    // 跳过可能的换行和空行
-    while (afterStart < readmeContent.length && 
-           (readmeContent[afterStart] === '\n' || readmeContent[afterStart] === '\r')) {
-      afterStart++;
-    }
-    const after = readmeContent.substring(afterStart);
-    readmeContent = before + statsMarkdown + '\n\n' + after;
-  } else {
-    // 如果找不到标记，在 "Wakatime Stats" 后面插入
-    const wakatimeIndex = readmeContent.indexOf('Wakatime Stats');
-    if (wakatimeIndex !== -1) {
-      const insertIndex = readmeContent.indexOf('\n', wakatimeIndex) + 1;
-      readmeContent = 
-        readmeContent.substring(0, insertIndex) + 
-        '\n' + statsMarkdown + '\n\n' + 
-        readmeContent.substring(insertIndex);
-    } else {
-      // 如果都找不到，在第一个表格后面插入
-      const tableEndIndex = readmeContent.indexOf('|', readmeContent.indexOf('|') + 1);
-      if (tableEndIndex !== -1) {
-        const insertIndex = readmeContent.indexOf('\n', tableEndIndex) + 1;
-        readmeContent = 
-          readmeContent.substring(0, insertIndex) + 
-          '\n' + statsMarkdown + '\n\n' + 
-          readmeContent.substring(insertIndex);
-      } else {
-        // 最后的选择：追加到文件末尾
-        readmeContent += '\n\n' + statsMarkdown;
-      }
-    }
+  
+  // 读取模板文件
+  if (!fs.existsSync(templatePath)) {
+    console.error('❌ 错误: 找不到 README.template.md 模板文件');
+    process.exit(1);
   }
-
-  fs.writeFileSync(readmePath, readmeContent, 'utf-8');
-  console.log('✅ README.md 已更新');
+  
+  let templateContent = fs.readFileSync(templatePath, 'utf-8');
+  
+  // 替换占位符
+  templateContent = templateContent.replace('{{STATS_SECTION}}', statsMarkdown);
+  
+  // 写入 README.md
+  fs.writeFileSync(readmePath, templateContent, 'utf-8');
+  console.log('✅ README.md 已根据模板更新');
 }
 
 // 主函数
@@ -1128,10 +1100,10 @@ async function main() {
     const commits = await getLast7DaysCommits();
     console.log(`✅ 找到 ${commits.length} 个 commits（过去7天）\n`);
 
-    // 获取仓库访问统计
-    console.log('👁️ 获取仓库访问统计...');
-    const repoViews = await getRepoViews();
-    console.log(`✅ 总访问量: ${repoViews.total} 次，独立访问: ${repoViews.unique} 次\n`);
+    // 获取个人资料主页访问统计
+    console.log('👁️ 获取个人资料主页访问统计...');
+    const profileViews = await getProfileViews();
+    console.log(`✅ 总访问量: ${profileViews.total} 次，独立访问: ${profileViews.unique} 次\n`);
 
     if (commits.length === 0) {
       console.log('⚠️ 过去七天暂无 commits，使用空数据');
@@ -1142,7 +1114,7 @@ async function main() {
         usageTime: { totalSeconds: 0, sessions: [] },
         commits: [],
         commits30Days: commits30Days,
-        repoViews: repoViews,
+        profileViews: profileViews,
       };
       const statsMarkdown = generateStatsMarkdown(emptyStats);
       await updateREADME(statsMarkdown);
@@ -1170,7 +1142,7 @@ async function main() {
       usageTime,
       commits,
       commits30Days,
-      repoViews,
+      profileViews,
     };
 
     console.log('📝 生成统计报告...');

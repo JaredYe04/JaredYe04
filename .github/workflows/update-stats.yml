@@ -53,7 +53,7 @@ jobs:
           git add README.md
           git add images/ || true
           if ! git diff --staged --quiet; then
-            git commit -m "📊 更新本周编程活动统计 [skip ci]"
+            git commit -m "📊 更新过去七天编程活动统计 [skip ci]"
             git push
             echo "✅ 已提交并推送更改"
           else
