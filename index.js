@@ -537,8 +537,8 @@ function generateCommitChart(commits30Days) {
   return chart;
 }
 
-// 生成编程语言占比 ECharts 饼图配置
-function generateLanguagePieChart(languageStats, usageTime, isDark = false) {
+// 生成编程语言占比 SVG 饼图
+function generateLanguagePieChartSVG(languageStats, usageTime, isDark = false) {
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
   const languageEntries = Object.entries(languageStats)
     .map(([lang, stat]) => ({
@@ -551,75 +551,98 @@ function generateLanguagePieChart(languageStats, usageTime, isDark = false) {
     .sort((a, b) => b.bytes - a.bytes)
     .slice(0, 10);
 
-  const data = languageEntries.map(({ lang, bytes, percentage }) => ({
-    value: bytes,
-    name: lang,
-  }));
-
+  // 颜色方案
+  const colors = [
+    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
+    '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#ff9f7f'
+  ];
+  
   const bgColor = isDark ? '#0d1117' : '#fffef0';
   const textColor = isDark ? '#c9d1d9' : '#333';
-  const borderColor = isDark ? '#30363d' : '#fff';
-
-  const option = {
-    backgroundColor: bgColor,
-    title: {
-      text: '编程语言占比',
-      left: 'center',
-      textStyle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: textColor,
-      },
-    },
-    tooltip: {
-      trigger: 'item',
-      formatter: '{b}: {c} bytes ({d}%)',
-      backgroundColor: isDark ? '#161b22' : '#fff',
-      borderColor: isDark ? '#30363d' : '#ddd',
-      textStyle: {
-        color: textColor,
-      },
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      top: 'middle',
-      textStyle: {
-        color: textColor,
-      },
-    },
-    series: [
-      {
-        name: '编程语言',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: borderColor,
-          borderWidth: 2,
-        },
-        label: {
-          show: true,
-          formatter: '{b}\n{d}%',
-          color: textColor,
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 16,
-            fontWeight: 'bold',
-            color: textColor,
-          },
-        },
-        data: data,
-      },
-    ],
-    width: 600,
-    height: 450,
-  };
-
-  return JSON.stringify(option, null, 2);
+  const textColorSecondary = isDark ? '#8b949e' : '#555';
+  
+  // SVG 尺寸
+  const width = 600;
+  const height = 450;
+  const centerX = width / 2;
+  const centerY = height / 2 + 20; // 稍微下移，为标题留空间
+  const radius = 120;
+  const innerRadius = 60;
+  
+  let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">\n`;
+  
+  // 背景
+  svg += `  <rect width="${width}" height="${height}" fill="${bgColor}"/>\n`;
+  
+  // 标题
+  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="${textColor}">编程语言占比</text>\n`;
+  
+  // 计算饼图扇形
+  let currentAngle = -90; // 从顶部开始
+  const slices = languageEntries.map((entry, index) => {
+    const angle = (entry.percentage / 100) * 360;
+    const startAngle = currentAngle;
+    const endAngle = currentAngle + angle;
+    currentAngle = endAngle;
+    
+    // 计算扇形路径（环形图）
+    const startAngleRad = (startAngle * Math.PI) / 180;
+    const endAngleRad = (endAngle * Math.PI) / 180;
+    
+    const outerX1 = centerX + radius * Math.cos(startAngleRad);
+    const outerY1 = centerY + radius * Math.sin(startAngleRad);
+    const outerX2 = centerX + radius * Math.cos(endAngleRad);
+    const outerY2 = centerY + radius * Math.sin(endAngleRad);
+    
+    const innerX1 = centerX + innerRadius * Math.cos(startAngleRad);
+    const innerY1 = centerY + innerRadius * Math.sin(startAngleRad);
+    const innerX2 = centerX + innerRadius * Math.cos(endAngleRad);
+    const innerY2 = centerY + innerRadius * Math.sin(endAngleRad);
+    
+    const largeArc = angle > 180 ? 1 : 0;
+    
+    // 环形路径
+    const path = `M ${outerX1} ${outerY1} A ${radius} ${radius} 0 ${largeArc} 1 ${outerX2} ${outerY2} L ${innerX2} ${innerY2} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${innerX1} ${innerY1} Z`;
+    
+    // 标签位置（扇形中间）
+    const labelAngle = (startAngle + endAngle) / 2;
+    const labelAngleRad = (labelAngle * Math.PI) / 180;
+    const labelRadius = (radius + innerRadius) / 2;
+    const labelX = centerX + labelRadius * Math.cos(labelAngleRad);
+    const labelY = centerY + labelRadius * Math.sin(labelAngleRad);
+    
+    return {
+      path,
+      color: colors[index % colors.length],
+      entry,
+      labelX,
+      labelY,
+    };
+  });
+  
+  // 绘制扇形
+  slices.forEach(slice => {
+    svg += `  <path d="${slice.path}" fill="${slice.color}" stroke="${bgColor}" stroke-width="2"/>\n`;
+    // 标签（如果百分比足够大）
+    if (slice.entry.percentage > 5) {
+      svg += `  <text x="${slice.labelX}" y="${slice.labelY}" text-anchor="middle" font-size="11" font-weight="bold" fill="${textColor}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
+    }
+  });
+  
+  // 图例（右侧）
+  let legendX = 350;
+  let legendY = 100;
+  slices.forEach((slice, index) => {
+    svg += `  <rect x="${legendX}" y="${legendY + index * 25}" width="15" height="15" fill="${slice.color}"/>\n`;
+    const displayName = slice.entry.lang.length > 15 ? slice.entry.lang.substring(0, 15) + '...' : slice.entry.lang;
+    svg += `  <text x="${legendX + 20}" y="${legendY + index * 25 + 12}" font-size="11" fill="${textColor}">${displayName}</text>\n`;
+    svg += `  <text x="${legendX + 20}" y="${legendY + index * 25 + 25}" font-size="10" fill="${textColorSecondary}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
+    legendY += 2; // 调整间距
+  });
+  
+  svg += `</svg>`;
+  
+  return svg;
 }
 
 // 生成提交趋势 SVG 折线图
@@ -970,32 +993,47 @@ function generateStatsMarkdown(stats) {
     });
   }
 
-  // 生成使用时间统计
-  const usageHours = Math.floor(usageTime.totalSeconds / 3600);
-  const usageMinutes = Math.floor((usageTime.totalSeconds % 3600) / 60);
-  const usageText = `总计 ${usageHours} 小时 ${usageMinutes} 分钟`;
+  // 生成使用时间统计（中文）
+  const usageHoursZh = Math.floor(usageTime.totalSeconds / 3600);
+  const usageMinutesZh = Math.floor((usageTime.totalSeconds % 3600) / 60);
+  const usageText = `总计 ${usageHoursZh} 小时 ${usageMinutesZh} 分钟`;
+  
+  // 生成使用时间统计（英文）
+  const usageHoursEn = Math.floor(usageTime.totalSeconds / 3600);
+  const usageMinutesEn = Math.floor((usageTime.totalSeconds % 3600) / 60);
+  const usageTextEn = `Total ${usageHoursEn} hours ${usageMinutesEn} minutes`;
 
   // 生成 ECharts 图表代码块
   let echartsCharts = '';
   
-  // 编程语言占比饼图（生成浅色和深色两个版本）
+  // 编程语言占比饼图（使用 SVG，生成浅色和深色两个版本）
   if (Object.keys(languageStats).length > 0 && totalBytes > 0) {
     try {
-      const pieChartLight = generateLanguagePieChart(languageStats, usageTime, false);
-      const pieChartDark = generateLanguagePieChart(languageStats, usageTime, true);
-      echartsCharts += `
+      const pieSVGLight = generateLanguagePieChartSVG(languageStats, usageTime, false);
+      const pieSVGDark = generateLanguagePieChartSVG(languageStats, usageTime, true);
+      
+      // 生成文件名（基于内容哈希）
+      const hashLight = crypto.createHash('sha256').update(pieSVGLight).digest('hex').slice(0, 12);
+      const hashDark = crypto.createHash('sha256').update(pieSVGDark).digest('hex').slice(0, 12);
+      const imageFilenameLight = `language-pie-light-${hashLight}.png`;
+      const imageFilenameDark = `language-pie-dark-${hashDark}.png`;
+      
+      const imagePathLight = saveSVGAsPNG(pieSVGLight, imageFilenameLight, false);
+      const imagePathDark = saveSVGAsPNG(pieSVGDark, imageFilenameDark, true);
+      
+      if (imagePathLight && imagePathDark) {
+        echartsCharts += `
 📊 **编程语言占比**
 
-\`\`\`echarts
-${pieChartLight}
-\`\`\`
-
-<!-- 深色模式版本 -->
-\`\`\`echarts
-${pieChartDark}
-\`\`\`
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
+  <img src="${imagePathLight}" alt="编程语言占比">
+</picture>
 
 `;
+      } else {
+        console.warn('编程语言占比图 PNG 保存失败，跳过');
+      }
     } catch (error) {
       console.warn('生成语言占比图表失败:', error.message);
     }
@@ -1017,12 +1055,16 @@ ${pieChartDark}
       const imagePathDark = saveSVGAsPNG(trendSVGDark, imageFilenameDark, true);
       
       if (imagePathLight && imagePathDark) {
-        echartsCharts += `
+        echartsCharts += `<div lang="zh-CN">
 📈 **过去30天提交趋势**
+</div>
+<div lang="en" style="display: none;">
+📈 **Commit Trends (Past 30 Days)**
+</div>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="${imagePathDark}">
-  <img src="${imagePathLight}" alt="提交趋势图">
+  <img src="${imagePathLight}" alt="提交趋势图 / Commit Trends">
 </picture>
 
 `;
@@ -1035,11 +1077,39 @@ ${pieChartDark}
   }
 
   // 访问统计（使用 visitor-badge 服务，这里显示仓库访问统计作为参考）
-  const viewsText = profileViews && profileViews.total > 0 
+  const viewsTextZh = profileViews && profileViews.total > 0 
     ? `👁️ 仓库访问: 总计 ${profileViews.total.toLocaleString()} 次 | 独立访问 ${profileViews.unique.toLocaleString()} 次（个人资料主页访问统计见下方徽章）`
-    : '👁️ 仓库访问: 统计中...（个人资料主页访问统计见下方徽章）';
+    : '👁️ 仓库访问: 统计中...';
+  
+  const viewsTextEn = profileViews && profileViews.total > 0 
+    ? `👁️ Repository Views: Total ${profileViews.total.toLocaleString()} | Unique ${profileViews.unique.toLocaleString()} (Profile views see badge below)`
+    : '👁️ Repository Views: Loading...';
 
-  return `📊 **过去七天我的编程活动统计**
+  // 生成英文版语言统计文本
+  let languageTextEn = '';
+  if (languageEntries.length === 0) {
+    languageTextEn = '(No code activity in the past 7 days)\n';
+  } else {
+    const maxLangWidth = Math.max(...languageEntries.map(e => e.lang.length), 15);
+    const maxTimeWidth = 20;
+    
+    languageEntries.forEach(({ lang, bytes, commits: langCommits, additions, percentage }) => {
+      const timeRatio = totalBytes > 0 ? bytes / totalBytes : 0;
+      const langSeconds = Math.floor(usageTime.totalSeconds * timeRatio);
+      const hours = Math.floor(langSeconds / 3600);
+      const minutes = Math.floor((langSeconds % 3600) / 60);
+      const timeStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+      const barLength = Math.floor(percentage / 2);
+      const bar = '█'.repeat(barLength) + '░'.repeat(50 - barLength);
+      languageTextEn += `${lang.padEnd(maxLangWidth)}\t${timeStr.padEnd(maxTimeWidth)}\t${bar}\t${percentage.toFixed(2)} %\n`;
+    });
+  }
+
+  // 英文版使用时间统计已在上面定义
+
+  return `<div lang="zh-CN">
+
+📊 **过去七天我的编程活动统计**
 
 \`\`\`
 💬 编程语言: 
@@ -1053,11 +1123,37 @@ ${usageText}
 提交次数               ${commitCount} 次
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
 
-${viewsText}
+${viewsTextZh}
 \`\`\`
 
 ${echartsCharts}
-> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
+> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）
+
+</div>
+
+<div lang="en" style="display: none;">
+
+📊 **My Coding Activity (Past 7 Days)**
+
+\`\`\`
+💬 Programming Languages: 
+${languageTextEn.trim()}
+
+⏱️ Computer Usage Time: 
+${usageTextEn}
+
+📝 Code Statistics: 
+Total Lines of Code (LOC)      ${totalLOC.toLocaleString()} lines
+Commits                        ${commitCount} times
+Active Repositories            ${new Set(commits.map(c => c.repoFullName)).size} repos
+
+${viewsTextEn}
+\`\`\`
+
+${echartsCharts}
+> ⏱️ Activity data inferred from GitHub events (no IDE plugins required)
+
+</div>`;
 }
 
 // 更新 README（基于模板）

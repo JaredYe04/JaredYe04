@@ -1,3 +1,5 @@
+<div lang="zh-CN">
+
 # JaredYe04 的个人主页
 
 欢迎来到我的世界。
@@ -13,39 +15,48 @@
 每一次运行，
 都是对明天的调用。
 
-<table>
-  <tr>
-    <td>
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://api.diraw.top/github/stats?username=JaredYe04&theme=transparent&include_all_commits=true&show_icons=true&hide_border=true&hide_title=true&text_size=16&text_color=c9d1d9&icon_color=c9d1d9&hide=contribs">
-        <source media="(prefers-color-scheme: light)" srcset="https://api.diraw.top/github/stats?username=JaredYe04&theme=transparent&include_all_commits=true&show_icons=true&hide_border=true&hide_title=true&text_size=16&text_color=333333&icon_color=333333&hide=contribs">
-        <img width="450" src="https://api.diraw.top/github/stats?username=JaredYe04&theme=transparent&include_all_commits=true&show_icons=true&hide_border=true&hide_title=true&text_size=16&hide=contribs" alt="GitHub Stats">
-      </picture>
-    </td>
-    <td>
-      <picture>
-        <source media="(prefers-color-scheme: dark)" srcset="https://api.diraw.top/github/stats/wakatime?username=JaredYe04&theme=transparent&hide_border=true&layout=compact&langs_count=6&hide_title=true&text_size=20&text_color=c9d1d9&icon_color=c9d1d9">
-        <source media="(prefers-color-scheme: light)" srcset="https://api.diraw.top/github/stats/wakatime?username=JaredYe04&theme=transparent&hide_border=true&layout=compact&langs_count=6&hide_title=true&text_size=20&text_color=333333&icon_color=333333">
-        <img src="https://api.diraw.top/github/stats/wakatime?username=JaredYe04&theme=light&bg_color=transparent&hide_border=true&layout=compact&langs_count=6&hide_title=true&text_size=20" alt="Wakatime Stats">
-      </picture>
-    </td>
-  </tr>
-</table>
-
-<div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://wakatime.com/share/@JaredYe04/b1603ee0-000a-43bd-b17b-e98288bbc052.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://wakatime.com/share/@JaredYe04/f2012205-2e27-4aa6-ab20-69906005c91a.svg">
-    <img src="https://wakatime.com/share/@JaredYe04/f2012205-2e27-4aa6-ab20-69906005c91a.svg" alt="Wakatime Stats">
-  </picture>
 </div>
+
+<div lang="en" style="display: none;">
+
+# JaredYe04's Profile
+
+Welcome to my world.
+There is no end, only answers that keep approaching.
+
+I write thoughts with code, respond to complexity with systems,
+seeking the way forward between technology and creation.
+
+This is JaredYe's World ——
+a continuously growing space,
+and my way of conversing with the future.
+
+Every execution,
+is a call to tomorrow.
+
+</div>
+
+<style>
+  html[lang="zh-CN"] div[lang="en"],
+  html[lang="zh"] div[lang="en"],
+  html[lang="zh-Hans"] div[lang="en"],
+  html[lang="zh-Hant"] div[lang="en"] {
+    display: none !important;
+  }
+  html[lang="en"] div[lang="zh-CN"],
+  html[lang="en-US"] div[lang="zh-CN"],
+  html[lang="en-GB"] div[lang="zh-CN"] {
+    display: none !important;
+  }
+  /* 默认显示中文 */
+  div[lang="en"] {
+    display: none !important;
+  }
+</style>
 
 {{STATS_SECTION}}
 
-<div align="center">
-  <img src="https://visitor-badge.glitch.me/badge?page_id=JaredYe04.JaredYe04" alt="Profile Views">
-</div>
-
+![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake-dark.svg">
   <img src="https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg" alt="Snake animation">
