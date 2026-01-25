@@ -2,8 +2,8 @@ name: Generate Snake Animation
 
 on:
   schedule:
-    # 每半小时运行一次
-    - cron: '*/30 * * * *'
+    # 每天 UTC 时间 00:00 运行（北京时间 08:00）
+    - cron: '0 0 * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:
@@ -14,6 +14,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: 确保 output 目录存在
+        run: |
+          mkdir -p output
+          echo "✅ output 目录已创建"
 
       - name: Generate snake animation
         uses: Platane/snk@v3
@@ -23,11 +31,26 @@ jobs:
             output/github-contribution-grid-snake.svg
             output/github-contribution-grid-snake-dark.svg?palette=github-dark
 
+      - name: 检查生成的文件
+        run: |
+          if [ -f "output/github-contribution-grid-snake.svg" ]; then
+            echo "✅ Snake 动画文件已生成"
+            ls -lh output/
+          else
+            echo "❌ Snake 动画文件未生成"
+            exit 1
+          fi
+
       - name: Push to repository
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add output/
-          git diff --staged --quiet || git commit -m "Update snake animation [skip ci]"
-          git push
+          if ! git diff --staged --quiet; then
+            git commit -m "🐍 更新 Snake 动画 [skip ci]"
+            git push
+            echo "✅ 已提交并推送 Snake 动画"
+          else
+            echo "ℹ️ 没有变更需要提交"
+          fi
 

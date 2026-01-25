@@ -45,7 +45,7 @@ TypeScript     	11 分钟               	░░░░░░░░░░░░░
 
 > ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）
 
-![Snake animation](https://github.com/JaredYe04/JaredYe04/blob/output/github-contribution-grid-snake.svg)
+![Snake animation](https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg)
 
 
 ## 关于
