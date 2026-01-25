@@ -591,9 +591,9 @@ function generateLanguagePieChartSVG(languageStats, usageTime, isDark = false) {
   // 绘制扇形
   slices.forEach(slice => {
     svg += `  <path d="${slice.path}" fill="${slice.color}" stroke="${bgColor}" stroke-width="2"/>\n`;
-    // 标签（如果百分比足够大，按比例放大字体）
+    // 标签（如果百分比足够大，按比例放大字体，使用黑色确保清晰可见）
     if (slice.entry.percentage > 5) {
-      svg += `  <text x="${slice.labelX}" y="${slice.labelY}" text-anchor="middle" font-size="${11 * scale}" font-weight="bold" fill="${textColor}">${slice.entry.percentage.toFixed(1)}%</text>\n`;
+      svg += `  <text x="${slice.labelX}" y="${slice.labelY}" text-anchor="middle" font-size="${11 * scale}" font-weight="bold" fill="#000000">${slice.entry.percentage.toFixed(1)}%</text>\n`;
     }
   });
   
