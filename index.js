@@ -565,15 +565,15 @@ function generateLanguagePieChart(languageStats, usageTime) {
         data: data,
       },
     ],
-    width: 800,
-    height: 600,
+    width: 600,
+    height: 450,
   };
 
   return JSON.stringify(option, null, 2);
 }
 
-// 生成提交趋势 ECharts 折线图配置
-function generateCommitTrendChart(commits30Days) {
+// 生成提交趋势 SVG 折线图
+function generateCommitTrendSVG(commits30Days) {
   // 初始化过去30天的数据
   const daysData = [];
   const now = new Date();
@@ -606,7 +606,7 @@ function generateCommitTrendChart(commits30Days) {
     }
   });
 
-  // 获取所有仓库名称（按提交数排序，取前10个）
+  // 获取所有仓库名称（按提交数排序，取前8个）
   const repoStats = {};
   daysData.forEach(day => {
     Object.entries(day.repos).forEach(([repo, count]) => {
@@ -619,8 +619,15 @@ function generateCommitTrendChart(commits30Days) {
 
   const topRepos = Object.entries(repoStats)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
+    .slice(0, 8)
     .map(([repo]) => repo);
+
+  // SVG 尺寸
+  const width = 1000;
+  const height = 500;
+  const padding = { top: 60, right: 80, bottom: 80, left: 60 };
+  const chartWidth = width - padding.left - padding.right;
+  const chartHeight = height - padding.top - padding.bottom;
 
   // 生成日期标签
   const dates = daysData.map(d => {
@@ -631,99 +638,142 @@ function generateCommitTrendChart(commits30Days) {
 
   // 生成总提交数数据
   const totalData = daysData.map(d => d.count);
+  const maxCount = Math.max(...totalData, 1);
 
   // 生成各仓库的提交数据
-  const repoSeries = topRepos.map(repo => ({
-    name: repo.split('/').pop(), // 只显示仓库名
-    type: 'line',
-    smooth: true,
-    symbol: 'circle',
-    symbolSize: 6,
+  const repoData = topRepos.map(repo => ({
+    name: repo.split('/').pop(),
     data: daysData.map(day => day.repos[repo] || 0),
-    lineStyle: {
-      width: 2,
-    },
   }));
 
-  const option = {
-    title: {
-      text: '过去30天提交趋势',
-      left: 'center',
-      textStyle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-      },
-    },
-    legend: {
-      data: ['总计', ...topRepos.map(r => r.split('/').pop())],
-      top: 40,
-      type: 'scroll',
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      top: '15%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: dates,
-      axisLabel: {
-        rotate: 45,
-        interval: 2, // 每2个显示一个标签
-      },
-    },
-    yAxis: {
-      type: 'value',
-      name: '提交次数',
-    },
-    series: [
-      {
-        name: '总计',
-        type: 'line',
-        smooth: true,
-        symbol: 'circle',
-        symbolSize: 8,
-        lineStyle: {
-          width: 3,
-          color: '#5470c6',
-        },
-        itemStyle: {
-          color: '#5470c6',
-        },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(84, 112, 198, 0.3)' },
-              { offset: 1, color: 'rgba(84, 112, 198, 0.1)' },
-            ],
-          },
-        },
-        data: totalData,
-        emphasis: {
-          focus: 'series',
-        },
-      },
-      ...repoSeries,
-    ],
-    width: 1200,
-    height: 600,
-  };
+  // 颜色数组
+  const colors = [
+    '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
+    '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#ff9f7f'
+  ];
 
-  return JSON.stringify(option, null, 2);
+  // 生成 SVG 路径点
+  function generatePath(points, smooth = false) {
+    if (points.length === 0) return '';
+    
+    if (smooth) {
+      // 使用贝塞尔曲线生成平滑路径
+      let path = `M ${points[0].x},${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const next = points[i + 1] || curr;
+        
+        const cp1x = prev.x + (curr.x - prev.x) / 3;
+        const cp1y = prev.y;
+        const cp2x = curr.x - (next.x - curr.x) / 3;
+        const cp2y = curr.y;
+        
+        path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${curr.x},${curr.y}`;
+      }
+      return path;
+    } else {
+      return points.map((p, i) => (i === 0 ? 'M' : 'L') + ` ${p.x},${p.y}`).join(' ');
+    }
+  }
+
+  // 生成面积路径
+  function generateAreaPath(points, baseY) {
+    if (points.length === 0) return '';
+    const path = generatePath(points, true);
+    const lastPoint = points[points.length - 1];
+    const firstPoint = points[0];
+    return `${path} L ${lastPoint.x},${baseY} L ${firstPoint.x},${baseY} Z`;
+  }
+
+  // 生成总提交数折线点
+  const totalPoints = totalData.map((count, i) => ({
+    x: padding.left + (totalData.length > 1 ? (i / (totalData.length - 1)) : 0) * chartWidth,
+    y: padding.top + chartHeight - (count / maxCount) * chartHeight,
+    count: count,
+  }));
+
+  // 生成各仓库折线点
+  const repoPoints = repoData.map((repo, repoIdx) => ({
+    name: repo.name,
+    points: repo.data.map((count, i) => ({
+      x: padding.left + (repo.data.length > 1 ? (i / (repo.data.length - 1)) : 0) * chartWidth,
+      y: padding.top + chartHeight - (count / maxCount) * chartHeight,
+      count: count,
+    })),
+    color: colors[repoIdx + 1] || colors[repoIdx % colors.length],
+  }));
+
+  // 生成 SVG
+  let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">\n`;
+  
+  // 背景
+  svg += `  <rect width="${width}" height="${height}" fill="#ffffff"/>\n`;
+  
+  // 标题
+  svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">过去30天提交趋势</text>\n`;
+  
+  // 网格线
+  for (let i = 0; i <= 5; i++) {
+    const y = padding.top + (chartHeight / 5) * i;
+    const value = Math.round(maxCount - (maxCount / 5) * i);
+    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>\n`;
+    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" fill="#666">${value}</text>\n`;
+  }
+  
+  // Y轴标签
+  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" fill="#666" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
+  
+  // 总面积填充（总计）
+  svg += `  <path d="${generateAreaPath(totalPoints, padding.top + chartHeight)}" fill="rgba(84, 112, 198, 0.1)" stroke="none"/>\n`;
+  
+  // 各仓库折线
+  repoPoints.forEach(repo => {
+    svg += `  <path d="${generatePath(repo.points, true)}" fill="none" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
+    // 数据点
+    repo.points.forEach(point => {
+      if (point.count > 0) {
+        svg += `  <circle cx="${point.x}" cy="${point.y}" r="3" fill="${repo.color}"/>\n`;
+      }
+    });
+  });
+  
+  // 总计折线（最上层，粗一点）
+  svg += `  <path d="${generatePath(totalPoints, true)}" fill="none" stroke="#5470c6" stroke-width="3"/>\n`;
+  
+  // 总计数据点
+  totalPoints.forEach(point => {
+    svg += `  <circle cx="${point.x}" cy="${point.y}" r="4" fill="#5470c6"/>\n`;
+  });
+  
+  // X轴标签（每5天显示一个）
+  dates.forEach((date, i) => {
+    if (i % 5 === 0 || i === dates.length - 1) {
+      const x = padding.left + (i / (dates.length - 1)) * chartWidth;
+      svg += `  <text x="${x}" y="${height - padding.bottom + 20}" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-45, ${x}, ${height - padding.bottom + 20})">${date}</text>\n`;
+    }
+  });
+  
+  // 图例
+  let legendX = padding.left + chartWidth + 20;
+  let legendY = padding.top + 20;
+  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="150" height="${(repoPoints.length + 1) * 25 + 10}" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>\n`;
+  
+  // 总计图例
+  svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="#5470c6" stroke-width="3"/>\n`;
+  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="12" fill="#333">总计</text>\n`;
+  legendY += 25;
+  
+  // 各仓库图例
+  repoPoints.forEach(repo => {
+    svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
+    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" fill="#333">${repo.name.length > 15 ? repo.name.substring(0, 15) + '...' : repo.name}</text>\n`;
+    legendY += 25;
+  });
+  
+  svg += `</svg>`;
+  
+  return svg;
 }
 
 // 生成统计 Markdown
@@ -742,14 +792,13 @@ function generateStatsMarkdown(stats) {
       percentage: totalBytes > 0 ? (stat.bytes / totalBytes) * 100 : 0,
     }))
     .sort((a, b) => {
-      // 按首字母排序（不区分大小写）
-      const aName = a.lang.toUpperCase();
-      const bName = b.lang.toUpperCase();
-      if (aName !== bName) {
-        return aName.localeCompare(bName);
-      }
-      // 如果首字母相同，按字节数降序
-      return b.bytes - a.bytes;
+      // 按使用时间降序排列
+      const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
+      const aTimeRatio = totalBytes > 0 ? a.bytes / totalBytes : 0;
+      const bTimeRatio = totalBytes > 0 ? b.bytes / totalBytes : 0;
+      const aSeconds = Math.floor(usageTime.totalSeconds * aTimeRatio);
+      const bSeconds = Math.floor(usageTime.totalSeconds * bTimeRatio);
+      return bSeconds - aSeconds; // 降序
     })
     .slice(0, 10); // 只显示前 10 种语言
 
@@ -801,16 +850,19 @@ ${pieChart}
     }
   }
 
-  // 提交趋势折线图
+  // 提交趋势图（使用 SVG）
   if (commits30Days && commits30Days.length > 0) {
     try {
-      const trendChart = generateCommitTrendChart(commits30Days);
+      const trendChart = generateCommitTrendSVG(commits30Days);
       echartsCharts += `
 📈 **过去30天提交趋势**
 
-\`\`\`echarts
+<details>
+<summary>点击展开查看图表</summary>
+
 ${trendChart}
-\`\`\`
+
+</details>
 
 `;
     } catch (error) {

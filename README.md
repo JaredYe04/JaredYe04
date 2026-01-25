@@ -1,15 +1,12 @@
-# JaredYe04 wakatime Profile Views
+# JaredYe04 的个人主页
 
-Welcome to my world... perhaps it still needs more time to be perfected.
+欢迎来到我的世界... 也许还需要更多时间来完善。
 
-My website: JaredYe's World, to grope for an answer why we move forward.
+我的网站：JaredYe's World，探索我们前进的理由。
 
-**I would be glad if you could walk with me, in search of the light that guides our way ahead.**
+**我很高兴你能与我同行，寻找指引我们前进的光明。**
 
-It's a new day, also a new summons to struggle.
-
-| ![GitHub Stats](https://api.diraw.top/github/stats?username=JaredYe04&theme=transparent&include_all_commits=true&show_icons=true&hide_border=true&hide_title=true&text_size=16&hide=contribs) | ![Wakatime Stats](https://api.diraw.top/github/stats/wakatime?username=JaredYe04&theme=light&bg_color=transparent&hide_border=true&layout=compact&languages_count=6&hide_title=true&text_size=20) |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+新的一天，也是新的奋斗召唤。
 
 📊 **本周我的编程活动统计**
 
@@ -58,9 +55,9 @@ PowerShell           1 分钟            ░░░░░░░░░░░░░
 ![Snake animation](https://github.com/JaredYe04/JaredYe04/blob/output/github-contribution-grid-snake.svg)
 
 
-## About
+## 关于
 
- Config files for my GitHub profile.
+这是我的 GitHub 个人主页配置文件。
 
 github.com/JaredYe04 
 
