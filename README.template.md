@@ -1,7 +1,5 @@
 # JaredYe04 的个人主页
 
-主页浏览量：![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
-
 欢迎来到我的世界。
 这里没有终点，只有不断逼近的答案。
 
@@ -14,6 +12,10 @@
 
 每一次运行，
 都是对明天的调用。
+
+**主页浏览量**
+![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
+
 
 {{STATS_SECTION}}
 
