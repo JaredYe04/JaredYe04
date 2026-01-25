@@ -60,6 +60,16 @@ function getWeekStart() {
   return weekStart.toISOString();
 }
 
+// 获取过去N天的开始时间（UTC+8）
+function getDaysAgoStart(days) {
+  const now = new Date();
+  const beijingTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+  const startDate = new Date(beijingTime);
+  startDate.setDate(beijingTime.getDate() - days);
+  startDate.setHours(0, 0, 0, 0);
+  return startDate.toISOString();
+}
+
 // 格式化时间
 function formatDuration(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -131,13 +141,12 @@ async function getRepoLanguages(owner, repo) {
   }
 }
 
-// 获取本周的 commits
-async function getWeeklyCommits() {
-  const weekStart = getWeekStart();
+// 获取指定时间范围内的 commits
+async function getCommitsSince(sinceDate, label = 'commits') {
   const commits = [];
   const repos = await getUserRepos();
 
-  console.log(`找到 ${repos.length} 个仓库，开始获取本周 commits...`);
+  console.log(`找到 ${repos.length} 个仓库，开始获取 ${label}...`);
 
   for (const repo of repos) {
     try {
@@ -150,7 +159,7 @@ async function getWeeklyCommits() {
             owner: repo.owner.login,
             repo: repo.name,
             author: GITHUB_USERNAME,
-            since: weekStart,
+            since: sinceDate,
             per_page: 100,
             page: page,
           });
@@ -184,6 +193,12 @@ async function getWeeklyCommits() {
   }
 
   return commits;
+}
+
+// 获取本周的 commits
+async function getWeeklyCommits() {
+  const weekStart = getWeekStart();
+  return await getCommitsSince(weekStart, '本周 commits');
 }
 
 // 获取 commit 的文件变更信息
@@ -379,9 +394,118 @@ function analyzeComputerUsageTime(commits) {
   return { totalSeconds, sessions };
 }
 
+// 生成过去30天的提交柱状图
+function generateCommitChart(commits30Days) {
+  // 初始化过去30天的数据
+  const daysData = [];
+  const now = new Date();
+  
+  // 创建过去30天的日期数组（使用本地时区）
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(now.getDate() - i);
+    date.setHours(0, 0, 0, 0);
+    const dateStr = date.toISOString().split('T')[0];
+    daysData.push({
+      date: date,
+      dateStr: dateStr,
+      count: 0,
+    });
+  }
+
+  // 统计每天的提交数
+  commits30Days.forEach(commit => {
+    const commitDate = new Date(commit.commit.author.date);
+    // 转换为本地时区的日期字符串
+    const commitDateStr = commitDate.toISOString().split('T')[0];
+    const dayData = daysData.find(d => d.dateStr === commitDateStr);
+    if (dayData) {
+      dayData.count++;
+    }
+  });
+
+  // 找到最大值用于缩放
+  const maxCount = Math.max(...daysData.map(d => d.count), 1);
+  const chartHeight = 8; // 图表高度（行数）
+
+  // 生成柱状图
+  let chart = '';
+  
+  // 从顶部到底部绘制
+  for (let row = chartHeight; row >= 0; row--) {
+    const threshold = (row / chartHeight) * maxCount;
+    let line = '';
+    
+    daysData.forEach((day, index) => {
+      if (day.count >= threshold) {
+        line += '█';
+      } else {
+        line += ' ';
+      }
+      // 每7天添加一个分隔符
+      if (index < daysData.length - 1 && (index + 1) % 7 === 0) {
+        line += ' ';
+      }
+    });
+    
+    // 添加Y轴标签
+    if (row === chartHeight) {
+      line += ` ${maxCount}`;
+    } else if (row === 0) {
+      line += ' 0';
+    } else if (row === Math.floor(chartHeight / 2)) {
+      const midValue = Math.floor(maxCount / 2);
+      line += ` ${midValue}`.padStart(3);
+    } else {
+      line += '   ';
+    }
+    
+    chart += line + '\n';
+  }
+
+  // 添加X轴分隔线
+  let separator = '';
+  daysData.forEach((day, index) => {
+    separator += '-';
+    if (index < daysData.length - 1 && (index + 1) % 7 === 0) {
+      separator += '+';
+    }
+  });
+  separator += '--';
+  chart += separator + '\n';
+
+  // 添加X轴（日期标签）
+  let xAxis = '';
+  daysData.forEach((day, index) => {
+    const dayOfMonth = day.date.getDate();
+    const month = day.date.getMonth() + 1;
+    // 只在每周的第一天和最后一天显示日期
+    if (index % 7 === 0 || index === daysData.length - 1) {
+      const label = `${month}/${dayOfMonth}`;
+      xAxis += label.padStart(2);
+    } else {
+      xAxis += '  ';
+    }
+    if (index < daysData.length - 1 && (index + 1) % 7 === 0) {
+      xAxis += ' ';
+    }
+  });
+  chart += xAxis + '\n';
+
+  // 添加统计信息
+  const totalCommits = commits30Days.length;
+  const avgCommits = (totalCommits / 30).toFixed(1);
+  const maxDayCommits = Math.max(...daysData.map(d => d.count));
+  const activeDays = daysData.filter(d => d.count > 0).length;
+
+  chart += `\n统计: 总计 ${totalCommits} 次 | 平均 ${avgCommits} 次/天 | 最高 ${maxDayCommits} 次/天 | 活跃 ${activeDays} 天`;
+
+  return chart;
+}
+
 // 生成统计 Markdown
 function generateStatsMarkdown(stats) {
-  const { languageStats, totalLOC, commitCount, usageTime, commits } = stats;
+  const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
 
   // 计算语言占比
   const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
@@ -419,6 +543,19 @@ function generateStatsMarkdown(stats) {
   const usageMinutes = Math.floor((usageTime.totalSeconds % 3600) / 60);
   const usageText = `总计 ${usageHours} 小时 ${usageMinutes} 分钟`;
 
+  // 生成过去30天的提交图表
+  let chartSection = '';
+  if (commits30Days && commits30Days.length > 0) {
+    const chart = generateCommitChart(commits30Days);
+    chartSection = `
+📈 **过去30天提交趋势**
+
+\`\`\`
+${chart}
+\`\`\`
+`;
+  }
+
   return `📊 **本周我的编程活动统计**
 
 \`\`\`
@@ -433,7 +570,7 @@ ${usageText}
 提交次数               ${commitCount} 次
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
 \`\`\`
-
+${chartSection}
 > ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
 }
 
@@ -498,10 +635,16 @@ async function main() {
   console.log(`📅 统计周期: 本周（从 ${weekStart} 开始）\n`);
 
   try {
+    // 获取过去30天的 commits（用于图表）
+    console.log('📦 获取过去30天的 commits（用于图表）...');
+    const days30Start = getDaysAgoStart(30);
+    const commits30Days = await getCommitsSince(days30Start, '过去30天 commits');
+    console.log(`✅ 找到 ${commits30Days.length} 个 commits（30天）\n`);
+
     // 获取本周 commits
     console.log('📦 获取本周 commits...');
     const commits = await getWeeklyCommits();
-    console.log(`✅ 找到 ${commits.length} 个 commits\n`);
+    console.log(`✅ 找到 ${commits.length} 个 commits（本周）\n`);
 
     if (commits.length === 0) {
       console.log('⚠️ 本周暂无 commits，使用空数据');
@@ -511,6 +654,7 @@ async function main() {
         commitCount: 0,
         usageTime: { totalSeconds: 0, sessions: [] },
         commits: [],
+        commits30Days: commits30Days,
       };
       const statsMarkdown = generateStatsMarkdown(emptyStats);
       await updateREADME(statsMarkdown);
@@ -537,6 +681,7 @@ async function main() {
       commitCount: commits.length,
       usageTime,
       commits,
+      commits30Days,
     };
 
     console.log('📝 生成统计报告...');
@@ -544,7 +689,8 @@ async function main() {
     await updateREADME(statsMarkdown);
 
     console.log('\n✨ 统计完成！');
-    console.log(`   - 提交次数: ${commits.length}`);
+    console.log(`   - 提交次数（本周）: ${commits.length}`);
+    console.log(`   - 提交次数（30天）: ${commits30Days.length}`);
     console.log(`   - 代码行数: ${totalLOC.toLocaleString()} LOC`);
     console.log(`   - 使用时间: ${formatDuration(usageTime.totalSeconds)}`);
     console.log(`   - 活跃仓库: ${new Set(commits.map(c => c.repoFullName)).size} 个`);
