@@ -1053,8 +1053,7 @@ ${usageText}
 活跃仓库数             ${new Set(commits.map(c => c.repoFullName)).size} 个
 \`\`\`
 
-${echartsCharts}
-> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）`;
+${echartsCharts}`;
 }
 
 // 更新 README（基于模板）

@@ -54,7 +54,6 @@ Java           	2 分钟                	░░░░░░░░░░░░░
 </picture>
 
 
-> ⏱️ 活动数据基于 GitHub 事件推断（无需 IDE 插件）
 
 
 <picture>
