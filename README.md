@@ -1,12 +1,17 @@
 # JaredYe04 的个人主页
 
-欢迎来到我的世界... 也许还需要更多时间来完善。
+欢迎来到我的世界。
+这里没有终点，只有不断逼近的答案。
 
-我的网站：JaredYe's World，探索我们前进的理由。
+我用代码书写思考，用系统回应复杂，
+在技术与创造之间，寻找前进的方向。
 
-**我很高兴你能与我同行，寻找指引我们前进的光明。**
+这是 JaredYe’s World ——
+一个持续生长的空间，
+也是我与未来对话的方式。
 
-新的一天，也是新的奋斗召唤。
+每一次运行，
+都是对明天的调用。
 
 📊 **本周我的编程活动统计**
 
@@ -159,9 +164,4 @@ PowerShell     	1 分钟                	░░░░░░░░░░░░░
 ![Snake animation](https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg)
 
 
-## 关于
-
-这是我的 GitHub 个人主页配置文件。
-
-github.com/JaredYe04 
 

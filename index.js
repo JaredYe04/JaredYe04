@@ -625,7 +625,7 @@ function generateCommitTrendSVG(commits30Days) {
   // SVG 尺寸
   const width = 1000;
   const height = 500;
-  const padding = { top: 60, right: 80, bottom: 80, left: 60 };
+  const padding = { top: 60, right: 200, bottom: 60, left: 60 }; // 增加右边距，减少下边距
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
@@ -707,8 +707,8 @@ function generateCommitTrendSVG(commits30Days) {
   // 生成 SVG
   let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">\n`;
   
-  // 背景
-  svg += `  <rect width="${width}" height="${height}" fill="#ffffff"/>\n`;
+  // 背景（黄白色护眼）
+  svg += `  <rect width="${width}" height="${height}" fill="#fffef0"/>\n`;
   
   // 标题
   svg += `  <text x="${width / 2}" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">过去30天提交趋势</text>\n`;
@@ -717,12 +717,12 @@ function generateCommitTrendSVG(commits30Days) {
   for (let i = 0; i <= 5; i++) {
     const y = padding.top + (chartHeight / 5) * i;
     const value = Math.round(maxCount - (maxCount / 5) * i);
-    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>\n`;
-    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" fill="#666">${value}</text>\n`;
+    svg += `  <line x1="${padding.left}" y1="${y}" x2="${padding.left + chartWidth}" y2="${y}" stroke="#e8e6d9" stroke-width="1" stroke-dasharray="2,2"/>\n`;
+    svg += `  <text x="${padding.left - 10}" y="${y + 5}" text-anchor="end" font-size="12" font-weight="bold" fill="#555">${value}</text>\n`;
   }
   
-  // Y轴标签
-  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" fill="#666" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
+  // Y轴标签（加粗）
+  svg += `  <text x="20" y="${height / 2}" text-anchor="middle" font-size="14" font-weight="bold" fill="#555" transform="rotate(-90, 20, ${height / 2})">提交次数</text>\n`;
   
   // 总面积填充（总计）
   svg += `  <path d="${generateAreaPath(totalPoints, padding.top + chartHeight)}" fill="rgba(84, 112, 198, 0.1)" stroke="none"/>\n`;
@@ -746,29 +746,32 @@ function generateCommitTrendSVG(commits30Days) {
     svg += `  <circle cx="${point.x}" cy="${point.y}" r="4" fill="#5470c6"/>\n`;
   });
   
-  // X轴标签（每5天显示一个）
+  // X轴标签（每5天显示一个，加粗，字体稍小）
   dates.forEach((date, i) => {
     if (i % 5 === 0 || i === dates.length - 1) {
       const x = padding.left + (i / (dates.length - 1)) * chartWidth;
-      svg += `  <text x="${x}" y="${height - padding.bottom + 20}" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-45, ${x}, ${height - padding.bottom + 20})">${date}</text>\n`;
+      svg += `  <text x="${x}" y="${height - padding.bottom + 15}" text-anchor="middle" font-size="10" font-weight="bold" fill="#555" transform="rotate(-30, ${x}, ${height - padding.bottom + 15})">${date}</text>\n`;
     }
   });
   
-  // 图例
-  let legendX = padding.left + chartWidth + 20;
+  // 图例（调整位置，避免溢出）
+  let legendX = padding.left + chartWidth + 15;
   let legendY = padding.top + 20;
-  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="150" height="${(repoPoints.length + 1) * 25 + 10}" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>\n`;
+  const legendWidth = 180;
+  const legendHeight = (repoPoints.length + 1) * 22 + 10;
+  svg += `  <rect x="${legendX - 10}" y="${legendY - 15}" width="${legendWidth}" height="${legendHeight}" fill="#fffef0" stroke="#d0cec0" stroke-width="1" rx="5"/>\n`;
   
   // 总计图例
   svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="#5470c6" stroke-width="3"/>\n`;
-  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="12" fill="#333">总计</text>\n`;
-  legendY += 25;
+  svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" font-weight="bold" fill="#333">总计</text>\n`;
+  legendY += 22;
   
-  // 各仓库图例
+  // 各仓库图例（缩短名称，避免溢出）
   repoPoints.forEach(repo => {
+    const displayName = repo.name.length > 12 ? repo.name.substring(0, 12) + '...' : repo.name;
     svg += `  <line x1="${legendX}" y1="${legendY}" x2="${legendX + 20}" y2="${legendY}" stroke="${repo.color}" stroke-width="2" opacity="0.7"/>\n`;
-    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="11" fill="#333">${repo.name.length > 15 ? repo.name.substring(0, 15) + '...' : repo.name}</text>\n`;
-    legendY += 25;
+    svg += `  <text x="${legendX + 25}" y="${legendY + 5}" font-size="10" fill="#333">${displayName}</text>\n`;
+    legendY += 22;
   });
   
   svg += `</svg>`;
@@ -857,12 +860,7 @@ ${pieChart}
       echartsCharts += `
 📈 **过去30天提交趋势**
 
-<details>
-<summary>点击展开查看图表</summary>
-
 ${trendChart}
-
-</details>
 
 `;
     } catch (error) {
