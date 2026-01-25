@@ -1,0 +1,21 @@
+{
+  "name": "github-profile-stats",
+  "version": "1.0.0",
+  "description": "自动统计 GitHub 活动数据并更新个人主页",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "github",
+    "stats",
+    "profile"
+  ],
+  "author": "JaredYe04",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^20.0.2"
+  }
+}
+
