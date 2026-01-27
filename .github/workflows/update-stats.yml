@@ -2,7 +2,7 @@ name: Update GitHub Stats
 
 on:
   schedule:
-    - cron: '0/5 * * * *'
+    - cron: '0/30 * * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:
