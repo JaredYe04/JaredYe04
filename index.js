@@ -98,8 +98,9 @@ function getTimeDiff(start, end) {
 // 格式化 UTC+8 时间戳
 function formatTimestampUTC8() {
   const now = new Date();
-  // 使用 toLocaleString 获取 UTC+8 时区的字符串，然后解析
-  const utc8String = now.toLocaleString('zh-CN', { 
+  
+  // 使用 Intl.DateTimeFormat 获取 UTC+8 时区的各个组件（更可靠）
+  const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Asia/Shanghai',
     year: 'numeric',
     month: '2-digit',
@@ -110,10 +111,13 @@ function formatTimestampUTC8() {
     hour12: false
   });
   
-  // 解析格式化的字符串：YYYY/MM/DD, HH:mm:ss
-  const [datePart, timePart] = utc8String.split(', ');
-  const [year, month, day] = datePart.split('/');
-  const [hours, minutes, seconds] = timePart.split(':');
+  const parts = formatter.formatToParts(now);
+  const year = parts.find(p => p.type === 'year').value;
+  const month = parts.find(p => p.type === 'month').value;
+  const day = parts.find(p => p.type === 'day').value;
+  const hours = parts.find(p => p.type === 'hour').value;
+  const minutes = parts.find(p => p.type === 'minute').value;
+  const seconds = parts.find(p => p.type === 'second').value;
   
   return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds} (UTC+8)`;
 }
