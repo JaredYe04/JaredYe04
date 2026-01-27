@@ -95,6 +95,29 @@ function getTimeDiff(start, end) {
   return Math.max(0, Math.floor((new Date(end) - new Date(start)) / 1000));
 }
 
+// 格式化 UTC+8 时间戳
+function formatTimestampUTC8() {
+  const now = new Date();
+  // 使用 toLocaleString 获取 UTC+8 时区的字符串，然后解析
+  const utc8String = now.toLocaleString('zh-CN', { 
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+  
+  // 解析格式化的字符串：YYYY/MM/DD, HH:mm:ss
+  const [datePart, timePart] = utc8String.split(', ');
+  const [year, month, day] = datePart.split('/');
+  const [hours, minutes, seconds] = timePart.split(':');
+  
+  return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds} (UTC+8)`;
+}
+
 
 // 获取用户的所有仓库
 async function getUserRepos() {
@@ -1110,6 +1133,10 @@ async function updateREADME(statsMarkdown) {
   
   // 替换占位符
   templateContent = templateContent.replace('{{STATS_SECTION}}', statsMarkdown);
+  
+  // 生成并替换时间戳
+  const timestamp = formatTimestampUTC8();
+  templateContent = templateContent.replace('{{UPDATE_TIMESTAMP}}', timestamp);
   
   // 写入 README.md
   fs.writeFileSync(readmePath, templateContent, 'utf-8');

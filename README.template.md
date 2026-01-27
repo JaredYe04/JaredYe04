@@ -22,3 +22,7 @@
   <img src="https://raw.githubusercontent.com/JaredYe04/JaredYe04/main/output/github-contribution-grid-snake.svg" alt="Snake animation">
 </picture>
 
+---
+
+**最后更新**: {{UPDATE_TIMESTAMP}}
+
