@@ -53,8 +53,8 @@ Java           	2 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-46d7e5128722.png">
-  <img src="images/commit-trend-light-44a72c54092e.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-8dcbc48c8370.png">
+  <img src="images/commit-trend-light-35f09499af39.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Java           	2 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年01月31日 07:39:00 (UTC+8)
+**最后更新**: 2026年01月31日 08:09:06 (UTC+8)
 
