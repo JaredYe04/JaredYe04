@@ -34,14 +34,7 @@
   ![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
 
 
-  📈 **过去30天提交趋势**
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-d50b08b80223.png">
-  <img src="images/commit-trend-light-e3d829c91d3c.png" alt="提交趋势图" width="1000">
-</picture>
-
-
+  
 
 
 <picture>
@@ -51,5 +44,5 @@
 
 ---
 
-**最后更新**: 2026年02月10日 03:29:18 (UTC+8)
+**最后更新**: 2026年02月10日 03:55:03 (UTC+8)
 
