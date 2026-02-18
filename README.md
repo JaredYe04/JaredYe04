@@ -18,39 +18,23 @@
 
 ```
 💬 编程语言: 
-Vue            	22 分钟               	█████████████████████████████████████░░░░░░░░░░░░░	74.76 %
-Other          	5 分钟                	████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	17.48 %
-JavaScript     	2 分钟                	███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	7.77 %
+（过去七天暂无代码活动）
 
 ⏱️ 使用电脑时间: 
 总计 0 小时 30 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      103 行
+总代码行数 (LOC)      0 行
 提交次数               1 次
 活跃仓库数             1 个
 ```
-
-###  📊 **编程语言占比**
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-6b445721de86.png">
-  <img src="images/language-pie-light-c6e05d4851ad.png" alt="编程语言占比" width="600">
-</picture>
 
 ###  📊 **主页浏览量**
 
   ![Profile Views](https://komarev.com/ghpvc/?username=JaredYe04&style=flat&color=blue)
 
 
-  📈 **过去30天提交趋势**
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-8d3e936e9435.png">
-  <img src="images/commit-trend-light-0f80ec30d7a4.png" alt="提交趋势图" width="1000">
-</picture>
-
-
+  
 
 
 <picture>
@@ -60,5 +44,5 @@ JavaScript     	2 分钟                	███░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年02月18日 21:56:05 (UTC+8)
+**最后更新**: 2026年02月18日 22:17:44 (UTC+8)
 
