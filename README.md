@@ -18,16 +18,24 @@
 
 ```
 💬 编程语言: 
-（过去七天暂无代码活动）
+JavaScript     	29 分钟               	███████████████████████████████████████████░░░░░░░	87.01 %
+JSON           	4 分钟                	██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	12.99 %
 
 ⏱️ 使用电脑时间: 
-总计 0 小时 0 分钟
+总计 0 小时 34 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      0 行
-提交次数               0 次
-活跃仓库数             0 个
+总代码行数 (LOC)      77 行
+提交次数               4 次
+活跃仓库数             1 个
 ```
+
+###  📊 **编程语言占比**
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-8b35d7a078e4.png">
+  <img src="images/language-pie-light-103ceedcaa37.png" alt="编程语言占比" width="600">
+</picture>
 
 ###  📊 **主页浏览量**
 
@@ -37,8 +45,8 @@
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-6636365978e8.png">
-  <img src="images/commit-trend-light-9ef3bfb9b550.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-ddd0f830143f.png">
+  <img src="images/commit-trend-light-ec9e2aa40128.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -51,5 +59,5 @@
 
 ---
 
-**最后更新**: 2026年02月23日 21:56:12 (UTC+8)
+**最后更新**: 2026年02月23日 22:19:33 (UTC+8)
 
