@@ -18,14 +18,14 @@
 
 ```
 💬 编程语言: 
-JavaScript     	22 分钟               	█████████████████████████████████░░░░░░░░░░░░░░░░░	66.67 %
-JSON           	11 分钟               	████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	33.33 %
+JavaScript     	29 分钟               	███████████████████████████████████████████░░░░░░░	87.01 %
+JSON           	4 分钟                	██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	12.99 %
 
 ⏱️ 使用电脑时间: 
 总计 0 小时 34 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      30 行
+总代码行数 (LOC)      77 行
 提交次数               4 次
 活跃仓库数             1 个
 ```
@@ -33,8 +33,8 @@ JSON           	11 分钟               	█████████████
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-9b88c12657cd.png">
-  <img src="images/language-pie-light-d1d4a45c1478.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-8b35d7a078e4.png">
+  <img src="images/language-pie-light-103ceedcaa37.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -59,5 +59,5 @@ JSON           	11 分钟               	█████████████
 
 ---
 
-**最后更新**: 2026年02月25日 19:15:47 (UTC+8)
+**最后更新**: 2026年02月25日 19:44:01 (UTC+8)
 
