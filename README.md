@@ -53,8 +53,8 @@ C++            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a5365cdd5e19.png">
-  <img src="images/commit-trend-light-6632afd87c1c.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-ef942e7767c3.png">
+  <img src="images/commit-trend-light-d0a93960b536.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ C++            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年03月12日 04:10:06 (UTC+8)
+**最后更新**: 2026年03月12日 08:14:55 (UTC+8)
 
