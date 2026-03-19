@@ -46,8 +46,8 @@ JSON           	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-c0e841fead62.png">
-  <img src="images/commit-trend-light-4613dd7f107e.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-9ad6b37e1ec9.png">
+  <img src="images/commit-trend-light-b610387952ec.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -60,5 +60,5 @@ JSON           	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年03月19日 04:11:09 (UTC+8)
+**最后更新**: 2026年03月19日 08:18:46 (UTC+8)
 
