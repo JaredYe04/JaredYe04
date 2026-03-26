@@ -37,8 +37,8 @@
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-6ba1be25aeea.png">
-  <img src="images/commit-trend-light-b3014264a68a.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-746abe135c91.png">
+  <img src="images/commit-trend-light-332abd8f6909.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -51,5 +51,5 @@
 
 ---
 
-**最后更新**: 2026年03月26日 04:11:58 (UTC+8)
+**最后更新**: 2026年03月26日 08:20:25 (UTC+8)
 
