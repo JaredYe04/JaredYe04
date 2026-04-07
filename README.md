@@ -18,16 +18,26 @@
 
 ```
 💬 编程语言: 
-（过去七天暂无代码活动）
+TypeScript     	1 小时 3 分钟           	████████████████████████████████████████████░░░░░░	89.35 %
+JavaScript     	6 分钟                	████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	9.03 %
+Markdown       	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.93 %
+JSON           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.69 %
 
 ⏱️ 使用电脑时间: 
-总计 0 小时 0 分钟
+总计 1 小时 11 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      0 行
-提交次数               0 次
-活跃仓库数             0 个
+总代码行数 (LOC)      432 行
+提交次数               5 次
+活跃仓库数             2 个
 ```
+
+###  📊 **编程语言占比**
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-71e7f3dbf496.png">
+  <img src="images/language-pie-light-7b24e119b513.png" alt="编程语言占比" width="600">
+</picture>
 
 ###  📊 **主页浏览量**
 
@@ -37,8 +47,8 @@
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a32ff814f95d.png">
-  <img src="images/commit-trend-light-7425f672f6b9.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-cb1f01e2dd8b.png">
+  <img src="images/commit-trend-light-4ddbb49f0f85.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -51,5 +61,5 @@
 
 ---
 
-**最后更新**: 2026年04月07日 12:47:53 (UTC+8)
+**最后更新**: 2026年04月07日 16:26:10 (UTC+8)
 
