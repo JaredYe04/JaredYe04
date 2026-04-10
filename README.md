@@ -18,28 +18,28 @@
 
 ```
 💬 编程语言: 
-TypeScript     	50 分钟               	████████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░	49.74 %
-PowerShell     	18 分钟               	█████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	18.69 %
-C++            	17 分钟               	████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	17.01 %
-Other          	8 分钟                	████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	8.51 %
-JavaScript     	5 分钟                	██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	5.03 %
-JSON           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.52 %
-Markdown       	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.52 %
+TypeScript     	58 分钟               	██████████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░	44.54 %
+JavaScript     	23 分钟               	████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	17.67 %
+PowerShell     	20 分钟               	███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	15.52 %
+C++            	18 分钟               	███████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	14.13 %
+Other          	9 分钟                	███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	7.07 %
+JSON           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.64 %
+Markdown       	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.43 %
 
 ⏱️ 使用电脑时间: 
-总计 1 小时 41 分钟
+总计 2 小时 11 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      776 行
-提交次数               6 次
+总代码行数 (LOC)      934 行
+提交次数               8 次
 活跃仓库数             3 个
 ```
 
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-676bf9c82de0.png">
-  <img src="images/language-pie-light-fb30bc4ad0ab.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-21343852e6c6.png">
+  <img src="images/language-pie-light-4ea449e3afbf.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -50,8 +50,8 @@ Markdown       	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-2ba381bb988e.png">
-  <img src="images/commit-trend-light-788ae128993d.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a255066cab50.png">
+  <img src="images/commit-trend-light-5a9b3d7fce2c.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -64,5 +64,5 @@ Markdown       	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年04月10日 12:58:14 (UTC+8)
+**最后更新**: 2026年04月10日 16:30:43 (UTC+8)
 
