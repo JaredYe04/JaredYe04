@@ -40,9 +40,12 @@ jobs:
             echo "ℹ️  images 目录不存在，跳过清理"
           fi
 
+      # 在仓库 Settings → Secrets 中添加 GH_STATS_PAT（classic: repo 范围；fine-grained: 可读私有仓）
+      # 不设则只统计公开仓库；默认 GITHUB_TOKEN 无法枚举其它私有仓
       - name: Run stats script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_STATS_PAT: ${{ secrets.GH_STATS_PAT }}
           GITHUB_USERNAME: ${{ github.repository_owner }}
         run: npm start
 

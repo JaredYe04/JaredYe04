@@ -5,18 +5,23 @@ const crypto = require('crypto');
 const { Resvg } = require('@resvg/resvg-js');
 
 // 配置
+// GH_STATS_PAT：可选。需含私有仓库读权限（classic: repo；fine-grained: Contents 读）。
+// 未设置时仅用 GITHUB_TOKEN + listForUser，只能统计公开仓库；默认 Actions 的 GITHUB_TOKEN 也不能跨私有仓。
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GH_STATS_PAT = process.env.GH_STATS_PAT;
 const GITHUB_USERNAME = process.env.GITHUB_USERNAME || 'JaredYe04';
 const REPO_OWNER = process.env.GITHUB_REPOSITORY_OWNER || GITHUB_USERNAME;
 const REPO_NAME = process.env.GITHUB_REPOSITORY?.split('/')[1] || 'JaredYe04';
 
-if (!GITHUB_TOKEN) {
-  console.error('错误: 需要设置 GITHUB_TOKEN 环境变量');
+const API_AUTH_TOKEN = GH_STATS_PAT || GITHUB_TOKEN;
+
+if (!API_AUTH_TOKEN) {
+  console.error('错误: 需要设置 GITHUB_TOKEN 环境变量（或同时设置 GH_STATS_PAT 以统计私有仓库）');
   process.exit(1);
 }
 
 const octokit = new Octokit({
-  auth: GITHUB_TOKEN,
+  auth: API_AUTH_TOKEN,
 });
 
 // 语言名称映射（中文显示）
@@ -123,20 +128,53 @@ function formatTimestampUTC8() {
 }
 
 
-// 获取用户的所有仓库
+async function getAuthenticatedLogin() {
+  try {
+    const { data } = await octokit.users.getAuthenticated();
+    return data.login;
+  } catch {
+    return null;
+  }
+}
+
+// 获取用户的所有仓库（公开 + 私有：需配置 GH_STATS_PAT 且与 GITHUB_USERNAME 为同一账号）
 async function getUserRepos() {
   try {
     const repos = [];
+    const authLogin = await getAuthenticatedLogin();
+    const sameAccount =
+      authLogin &&
+      authLogin.toLowerCase() === String(GITHUB_USERNAME).toLowerCase();
+
+    const useAuthenticatedList = Boolean(GH_STATS_PAT) && sameAccount;
+
+    if (GH_STATS_PAT && !sameAccount) {
+      console.warn(
+        `⚠️ 已设置 GH_STATS_PAT，但当前令牌对应账号为「${authLogin || '未知'}」，与 GITHUB_USERNAME「${GITHUB_USERNAME}」不一致，仍按公开仓库列表统计。`
+      );
+    } else if (!GH_STATS_PAT) {
+      console.log(
+        'ℹ️ 未设置 GH_STATS_PAT：仅通过公开接口枚举仓库，私有仓库不会计入统计。要包含私有仓库请在环境中设置 GH_STATS_PAT（需 repo / 对应仓库读权限）。'
+      );
+    }
+
     let page = 1;
     let hasMore = true;
 
     while (hasMore) {
-      const { data } = await octokit.repos.listForUser({
-        username: GITHUB_USERNAME,
-        per_page: 100,
-        page: page,
-        sort: 'updated',
-      });
+      const { data } = useAuthenticatedList
+        ? await octokit.repos.listForAuthenticatedUser({
+            per_page: 100,
+            page,
+            sort: 'updated',
+            affiliation: 'owner,collaborator,organization_member',
+          })
+        : await octokit.repos.listForUser({
+            username: GITHUB_USERNAME,
+            per_page: 100,
+            page,
+            sort: 'updated',
+          });
 
       if (data.length === 0) {
         hasMore = false;
