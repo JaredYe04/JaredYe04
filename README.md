@@ -18,28 +18,28 @@
 
 ```
 💬 编程语言: 
-Other          	24 小时 48 分钟         	██████████████████████████████████████████████░░░░	93.86 %
-Markdown       	38 分钟               	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.44 %
-TypeScript     	26 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.68 %
-JavaScript     	15 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.99 %
-JSON           	9 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.59 %
-Vue            	5 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.35 %
+Other          	27 小时 34 分钟         	██████████████████████████████████████████████░░░░	93.92 %
+Markdown       	42 分钟               	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.41 %
+TypeScript     	29 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.67 %
+JavaScript     	17 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.98 %
+JSON           	10 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.58 %
+Vue            	6 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.34 %
 YAML           	1 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.10 %
 
 ⏱️ 使用电脑时间: 
-总计 26 小时 26 分钟
+总计 29 小时 21 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      129,014 行
-提交次数               31 次
+总代码行数 (LOC)      130,218 行
+提交次数               32 次
 活跃仓库数             2 个
 ```
 
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-c6b2ab53062e.png">
-  <img src="images/language-pie-light-0d7fdc8c8ea6.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-471e6ed1cec1.png">
+  <img src="images/language-pie-light-8881f7bd8b4e.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -50,8 +50,8 @@ YAML           	1 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-0f087375ae83.png">
-  <img src="images/commit-trend-light-86135703788b.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-88b8b663cbe9.png">
+  <img src="images/commit-trend-light-ed82d56026f1.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -64,5 +64,5 @@ YAML           	1 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年05月07日 24:32:37 (UTC+8)
+**最后更新**: 2026年05月07日 04:31:40 (UTC+8)
 
