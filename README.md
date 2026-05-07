@@ -18,25 +18,26 @@
 
 ```
 💬 编程语言: 
-Other          	28 小时 3 分钟          	████████████████████████████████████████████████░░	97.19 %
-Markdown       	38 分钟               	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.24 %
-JavaScript     	5 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.32 %
-JSON           	4 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.25 %
+Other          	34 小时 13 分钟         	████████████████████████████████████████████████░░	97.12 %
+Markdown       	45 分钟               	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.17 %
+JavaScript     	6 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.31 %
+JSON           	5 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.24 %
+Python         	3 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.15 %
 
 ⏱️ 使用电脑时间: 
-总计 28 小时 51 分钟
+总计 35 小时 14 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      125,775 行
-提交次数               30 次
+总代码行数 (LOC)      129,524 行
+提交次数               35 次
 活跃仓库数             1 个
 ```
 
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-8a77fb978238.png">
-  <img src="images/language-pie-light-910020edd480.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-46c8f615e87f.png">
+  <img src="images/language-pie-light-b030927c7ac8.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -47,8 +48,8 @@ JSON           	4 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-70f363c95fdb.png">
-  <img src="images/commit-trend-light-5ca7c0b4a172.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-bbbea9b2bc63.png">
+  <img src="images/commit-trend-light-a120ac69b1ca.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -61,5 +62,5 @@ JSON           	4 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年05月08日 24:35:22 (UTC+8)
+**最后更新**: 2026年05月08日 04:28:19 (UTC+8)
 
