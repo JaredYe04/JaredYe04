@@ -18,26 +18,26 @@
 
 ```
 💬 编程语言: 
-Other          	56 小时 0 分钟          	███████████████████████████████████████████████░░░	95.13 %
-Markdown       	1 小时 19 分钟          	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.26 %
-Python         	49 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.39 %
-JavaScript     	32 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.91 %
-JSON           	11 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.31 %
+Other          	60 小时 51 分钟         	███████████████████████████████████████████████░░░	95.25 %
+Markdown       	1 小时 24 分钟          	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.21 %
+Python         	51 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.35 %
+JavaScript     	34 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.89 %
+JSON           	11 分钟               	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.30 %
 
 ⏱️ 使用电脑时间: 
-总计 58 小时 53 分钟
+总计 63 小时 53 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      139,274 行
-提交次数               43 次
+总代码行数 (LOC)      142,844 行
+提交次数               44 次
 活跃仓库数             1 个
 ```
 
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-72c6c0f6c209.png">
-  <img src="images/language-pie-light-7e845738c107.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-d8813a29180d.png">
+  <img src="images/language-pie-light-b6bd54010ccf.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -48,8 +48,8 @@ JSON           	11 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-bb617344c000.png">
-  <img src="images/commit-trend-light-4ceac55b5146.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-43e0f80ed22c.png">
+  <img src="images/commit-trend-light-14d7a12f2d97.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -62,5 +62,5 @@ JSON           	11 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年05月10日 20:18:16 (UTC+8)
+**最后更新**: 2026年05月11日 24:18:54 (UTC+8)
 
