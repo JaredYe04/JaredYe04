@@ -51,8 +51,8 @@ Python         	1 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-19393d06b114.png">
-  <img src="images/commit-trend-light-5713456865fe.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a6155e53ca56.png">
+  <img src="images/commit-trend-light-188fa9a1f720.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -65,5 +65,5 @@ Python         	1 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年05月17日 04:15:58 (UTC+8)
+**最后更新**: 2026年05月17日 08:32:48 (UTC+8)
 
