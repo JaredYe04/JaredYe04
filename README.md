@@ -18,16 +18,28 @@
 
 ```
 💬 编程语言: 
-（过去七天暂无代码活动）
+JavaScript     	1 小时 5 分钟           	█████████████████████████████░░░░░░░░░░░░░░░░░░░░░	59.12 %
+TypeScript     	18 分钟               	████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	16.44 %
+JSON           	18 分钟               	████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	16.31 %
+Markdown       	6 分钟                	███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	6.30 %
+Other          	1 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.10 %
+YAML           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.73 %
 
 ⏱️ 使用电脑时间: 
-总计 0 小时 0 分钟
+总计 1 小时 50 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      0 行
-提交次数               0 次
-活跃仓库数             0 个
+总代码行数 (LOC)      43,449 行
+提交次数               3 次
+活跃仓库数             1 个
 ```
+
+###  📊 **编程语言占比**
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-77aa0887104f.png">
+  <img src="images/language-pie-light-c7e7f4de601e.png" alt="编程语言占比" width="600">
+</picture>
 
 ###  📊 **主页浏览量**
 
@@ -37,8 +49,8 @@
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-4e23e52e3b64.png">
-  <img src="images/commit-trend-light-518da2d0f6fe.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-996f30c7362a.png">
+  <img src="images/commit-trend-light-c62004c6bdcb.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -51,5 +63,5 @@
 
 ---
 
-**最后更新**: 2026年06月02日 17:26:02 (UTC+8)
+**最后更新**: 2026年06月02日 21:13:48 (UTC+8)
 
