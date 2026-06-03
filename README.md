@@ -49,8 +49,8 @@ YAML           	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-996f30c7362a.png">
-  <img src="images/commit-trend-light-c62004c6bdcb.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-5ee213746ee0.png">
+  <img src="images/commit-trend-light-c5e344a8995c.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -63,5 +63,5 @@ YAML           	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年06月03日 05:02:46 (UTC+8)
+**最后更新**: 2026年06月03日 08:46:45 (UTC+8)
 
