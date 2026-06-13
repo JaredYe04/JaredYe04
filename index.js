@@ -28,6 +28,8 @@ const octokit = new Octokit({
 const languageNames = {
   'C++': 'C++',
   'C': 'C',
+  'C#': 'C#',
+  'F#': 'F#',
   'JavaScript': 'JavaScript',
   'TypeScript': 'TypeScript',
   'Python': 'Python',
@@ -38,15 +40,33 @@ const languageNames = {
   'Ruby': 'Ruby',
   'Swift': 'Swift',
   'Kotlin': 'Kotlin',
+  'Scala': 'Scala',
   'Dart': 'Dart',
+  'Elixir': 'Elixir',
+  'Erlang': 'Erlang',
+  'Clojure': 'Clojure',
+  'Haskell': 'Haskell',
+  'Lua': 'Lua',
+  'Perl': 'Perl',
+  'R': 'R',
+  'Objective-C': 'Objective-C',
+  'Zig': 'Zig',
+  'Nim': 'Nim',
+  'OCaml': 'OCaml',
+  'Julia': 'Julia',
+  'Solidity': 'Solidity',
+  'SQL': 'SQL',
   'HTML': 'HTML',
   'CSS': 'CSS',
   'SCSS': 'SCSS',
   'Less': 'Less',
   'Vue': 'Vue',
+  'Svelte': 'Svelte',
   'Markdown': 'Markdown',
   'JSON': 'JSON',
   'YAML': 'YAML',
+  'TOML': 'TOML',
+  'XML': 'XML',
   'Shell': 'Shell',
   'PowerShell': 'PowerShell',
   'Dockerfile': 'Dockerfile',
@@ -54,6 +74,95 @@ const languageNames = {
   'Makefile': 'Makefile',
   'Other': 'Other',
 };
+
+// 文件扩展名 → 编程语言（参考 GitHub Linguist 常见映射）
+const FILE_EXTENSION_TO_LANGUAGE = {
+  'js': 'JavaScript', 'jsx': 'JavaScript', 'mjs': 'JavaScript', 'cjs': 'JavaScript',
+  'ts': 'TypeScript', 'tsx': 'TypeScript', 'mts': 'TypeScript', 'cts': 'TypeScript',
+  'py': 'Python', 'pyw': 'Python', 'pyi': 'Python',
+  'java': 'Java',
+  'kt': 'Kotlin', 'kts': 'Kotlin',
+  'scala': 'Scala', 'sc': 'Scala',
+  'groovy': 'Groovy', 'gradle': 'Gradle',
+  'c': 'C', 'h': 'C',
+  'cpp': 'C++', 'cc': 'C++', 'cxx': 'C++', 'c++': 'C++',
+  'hpp': 'C++', 'hh': 'C++', 'hxx': 'C++', 'h++': 'C++',
+  'cs': 'C#', 'csx': 'C#',
+  'fs': 'F#', 'fsi': 'F#', 'fsx': 'F#',
+  'go': 'Go',
+  'rs': 'Rust',
+  'php': 'PHP', 'phtml': 'PHP',
+  'rb': 'Ruby', 'erb': 'Ruby', 'rake': 'Ruby',
+  'swift': 'Swift',
+  'dart': 'Dart',
+  'ex': 'Elixir', 'exs': 'Elixir',
+  'erl': 'Erlang', 'hrl': 'Erlang',
+  'clj': 'Clojure', 'cljs': 'Clojure', 'cljc': 'Clojure', 'edn': 'Clojure',
+  'hs': 'Haskell', 'lhs': 'Haskell',
+  'lua': 'Lua',
+  'pl': 'Perl', 'pm': 'Perl',
+  'r': 'R', 'rmd': 'R',
+  'm': 'Objective-C', 'mm': 'Objective-C',
+  'zig': 'Zig',
+  'nim': 'Nim',
+  'ml': 'OCaml', 'mli': 'OCaml',
+  'jl': 'Julia',
+  'sol': 'Solidity',
+  'sql': 'SQL', 'psql': 'SQL',
+  'html': 'HTML', 'htm': 'HTML', 'xhtml': 'HTML',
+  'css': 'CSS',
+  'scss': 'SCSS', 'sass': 'SCSS',
+  'less': 'Less',
+  'vue': 'Vue',
+  'svelte': 'Svelte',
+  'md': 'Markdown', 'markdown': 'Markdown',
+  'json': 'JSON', 'jsonc': 'JSON',
+  'yaml': 'YAML', 'yml': 'YAML',
+  'toml': 'TOML',
+  'xml': 'XML', 'xsl': 'XML', 'xslt': 'XML',
+  'sh': 'Shell', 'bash': 'Shell', 'zsh': 'Shell', 'fish': 'Shell',
+  'ps1': 'PowerShell', 'psm1': 'PowerShell', 'psd1': 'PowerShell',
+  'dockerfile': 'Dockerfile',
+  'cmake': 'CMake',
+  'makefile': 'Makefile',
+  'proto': 'Protocol Buffers', 'graphql': 'GraphQL', 'gql': 'GraphQL',
+  'vb': 'Visual Basic', 'vbs': 'Visual Basic',
+  'asm': 'Assembly', 's': 'Assembly',
+  'pas': 'Pascal', 'd': 'D',
+  'cr': 'Crystal', 'v': 'V',
+  'tf': 'HCL', 'hcl': 'HCL',
+  'cshtml': 'Razor', 'razor': 'Razor',
+};
+
+const SPECIAL_FILENAME_TO_LANGUAGE = {
+  'dockerfile': 'Dockerfile',
+  'makefile': 'Makefile',
+  'gnumakefile': 'Makefile',
+  'cmakelists.txt': 'CMake',
+  'rakefile': 'Ruby',
+  'gemfile': 'Ruby',
+  'podfile': 'Ruby',
+  'vagrantfile': 'Ruby',
+  'brewfile': 'Ruby',
+  'procfile': 'Procfile',
+};
+
+// 非代码文件扩展名，归类为 Other
+const NON_CODE_EXTENSIONS = new Set([
+  'png', 'jpg', 'jpeg', 'gif', 'webp', 'ico', 'bmp', 'tiff', 'tif', 'svg',
+  'mp3', 'mp4', 'wav', 'avi', 'mov', 'mkv', 'webm',
+  'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx',
+  'zip', 'tar', 'gz', 'rar', '7z', 'bz2',
+  'lock', 'sum',
+  'woff', 'woff2', 'ttf', 'eot', 'otf',
+  'exe', 'dll', 'so', 'dylib', 'bin', 'obj', 'o', 'a', 'lib',
+  'map', 'min',
+  'txt', 'log', 'csv', 'tsv',
+  'gitignore', 'gitattributes', 'gitmodules', 'editorconfig', 'dockerignore',
+  'pem', 'crt', 'cer', 'key', 'p12', 'pfx',
+  'db', 'sqlite', 'sqlite3',
+  'env', 'ini', 'cfg', 'conf',
+]);
 
 // 获取过去7天的开始时间（UTC+8）
 function getLast7DaysStart() {
@@ -283,36 +392,59 @@ async function getCommitFiles(owner, repo, sha) {
 
 // 根据文件扩展名判断语言
 function getLanguageFromFile(filename) {
-  const ext = filename.split('.').pop()?.toLowerCase();
-  const langMap = {
-    'js': 'JavaScript', 'jsx': 'JavaScript', 'mjs': 'JavaScript', 'cjs': 'JavaScript',
-    'ts': 'TypeScript', 'tsx': 'TypeScript',
-    'py': 'Python', 'pyw': 'Python',
-    'java': 'Java',
-    'cpp': 'C++', 'cc': 'C++', 'cxx': 'C++', 'hpp': 'C++', 'h': 'C++',
-    'c': 'C',
-    'go': 'Go',
-    'rs': 'Rust',
-    'php': 'PHP',
-    'rb': 'Ruby',
-    'swift': 'Swift',
-    'kt': 'Kotlin', 'kts': 'Kotlin',
-    'dart': 'Dart',
-    'html': 'HTML', 'htm': 'HTML',
-    'css': 'CSS',
-    'scss': 'SCSS', 'sass': 'SCSS',
-    'less': 'Less',
-    'vue': 'Vue',
-    'md': 'Markdown',
-    'json': 'JSON',
-    'yaml': 'YAML', 'yml': 'YAML',
-    'sh': 'Shell', 'bash': 'Shell',
-    'ps1': 'PowerShell',
-    'dockerfile': 'Dockerfile',
-    'cmake': 'CMake', 'cmake.txt': 'CMake',
-    'makefile': 'Makefile',
-  };
-  return langMap[ext] || 'Other';
+  const basename = filename.split('/').pop().split('\\').pop().toLowerCase();
+
+  if (SPECIAL_FILENAME_TO_LANGUAGE[basename]) {
+    return SPECIAL_FILENAME_TO_LANGUAGE[basename];
+  }
+
+  const dotIndex = basename.lastIndexOf('.');
+  if (dotIndex <= 0) {
+    return 'Other';
+  }
+
+  const ext = basename.slice(dotIndex + 1);
+  if (FILE_EXTENSION_TO_LANGUAGE[ext]) {
+    return FILE_EXTENSION_TO_LANGUAGE[ext];
+  }
+
+  if (NON_CODE_EXTENSIONS.has(ext)) {
+    return 'Other';
+  }
+
+  // 未知扩展名：保留为独立语言（首字母大写），而非一律归为 Other
+  return ext.charAt(0).toUpperCase() + ext.slice(1);
+}
+
+// 展示时将排名靠后的少量语言合并为 Other
+function consolidateLanguageStats(languageStats, topN = 10) {
+  const entries = Object.entries(languageStats)
+    .filter(([, stat]) => stat.bytes > 0)
+    .sort((a, b) => b[1].bytes - a[1].bytes);
+
+  if (entries.length <= topN) {
+    return languageStats;
+  }
+
+  const result = {};
+  const otherStat = { bytes: 0, commits: 0, additions: 0, deletions: 0 };
+
+  entries.forEach(([lang, stat], index) => {
+    if (index < topN - 1) {
+      result[lang] = { ...stat };
+    } else {
+      otherStat.bytes += stat.bytes;
+      otherStat.commits += stat.commits;
+      otherStat.additions += stat.additions || 0;
+      otherStat.deletions += stat.deletions || 0;
+    }
+  });
+
+  if (otherStat.bytes > 0) {
+    result.Other = otherStat;
+  }
+
+  return result;
 }
 
 // 获取代码量统计
@@ -571,8 +703,9 @@ function generateCommitChart(commits30Days) {
 
 // 生成编程语言占比 SVG 饼图
 function generateLanguagePieChartSVG(languageStats, usageTime, isDark = false) {
-  const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
-  const languageEntries = Object.entries(languageStats)
+  const consolidatedStats = consolidateLanguageStats(languageStats);
+  const totalBytes = Object.values(consolidatedStats).reduce((sum, stat) => sum + stat.bytes, 0);
+  const languageEntries = Object.entries(consolidatedStats)
     .map(([lang, stat]) => ({
       lang: languageNames[lang] || lang,
       originalLang: lang,
@@ -1014,9 +1147,10 @@ function saveSVGAsPNG(svgString, filename, isDark = false) {
 function generateStatsMarkdown(stats) {
   const { languageStats, totalLOC, commitCount, usageTime, commits, commits30Days } = stats;
 
-  // 计算语言占比
-  const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
-  const languageEntries = Object.entries(languageStats)
+  // 计算语言占比（合并少量语言为 Other 后再展示）
+  const consolidatedStats = consolidateLanguageStats(languageStats);
+  const totalBytes = Object.values(consolidatedStats).reduce((sum, stat) => sum + stat.bytes, 0);
+  const languageEntries = Object.entries(consolidatedStats)
     .map(([lang, stat]) => ({
       lang: languageNames[lang] || lang,
       originalLang: lang,
@@ -1027,14 +1161,12 @@ function generateStatsMarkdown(stats) {
     }))
     .sort((a, b) => {
       // 按使用时间降序排列
-      const totalBytes = Object.values(languageStats).reduce((sum, stat) => sum + stat.bytes, 0);
       const aTimeRatio = totalBytes > 0 ? a.bytes / totalBytes : 0;
       const bTimeRatio = totalBytes > 0 ? b.bytes / totalBytes : 0;
       const aSeconds = Math.floor(usageTime.totalSeconds * aTimeRatio);
       const bSeconds = Math.floor(usageTime.totalSeconds * bTimeRatio);
       return bSeconds - aSeconds; // 降序
-    })
-    .slice(0, 10); // 只显示前 10 种语言
+    });
 
   // 生成语言统计文本
   let languageText = '';
