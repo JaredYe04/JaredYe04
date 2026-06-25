@@ -47,8 +47,8 @@ CSS            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-3e490c1216fb.png">
-  <img src="images/commit-trend-light-078bf08cca7c.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-9aa00b705285.png">
+  <img src="images/commit-trend-light-ae1a33f5a141.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -61,5 +61,5 @@ CSS            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年06月25日 04:34:40 (UTC+8)
+**最后更新**: 2026年06月25日 08:38:30 (UTC+8)
 
