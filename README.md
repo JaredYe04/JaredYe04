@@ -53,8 +53,8 @@ Vdf            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-c7e9fea209ec.png">
-  <img src="images/commit-trend-light-89b6b0963aa7.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-e3945d574cb1.png">
+  <img src="images/commit-trend-light-647af612c54a.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Vdf            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年07月02日 04:34:47 (UTC+8)
+**最后更新**: 2026年07月02日 08:37:49 (UTC+8)
 
