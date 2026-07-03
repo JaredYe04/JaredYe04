@@ -52,8 +52,8 @@ JavaScript     	10 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-742e3508221b.png">
-  <img src="images/commit-trend-light-17647351ef09.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-76bce35151cf.png">
+  <img src="images/commit-trend-light-874a3697dc09.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ JavaScript     	10 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年07月03日 04:57:30 (UTC+8)
+**最后更新**: 2026年07月03日 10:13:27 (UTC+8)
 
