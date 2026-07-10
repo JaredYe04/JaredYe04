@@ -52,8 +52,8 @@ TypeScript     	25 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-e99edbc566fb.png">
-  <img src="images/commit-trend-light-9b73423c94ff.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-c95c215dfc32.png">
+  <img src="images/commit-trend-light-b63f6e478544.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ TypeScript     	25 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年07月10日 05:16:35 (UTC+8)
+**最后更新**: 2026年07月10日 10:14:17 (UTC+8)
 
