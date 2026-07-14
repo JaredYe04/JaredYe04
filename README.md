@@ -52,8 +52,8 @@ Bib            	12 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-d8da6b96ba4b.png">
-  <img src="images/commit-trend-light-03c659678d0c.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-90761f9bc497.png">
+  <img src="images/commit-trend-light-afa40791c69d.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ Bib            	12 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年07月14日 04:52:57 (UTC+8)
+**最后更新**: 2026年07月14日 09:50:48 (UTC+8)
 
