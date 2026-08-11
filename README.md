@@ -55,8 +55,8 @@ Bbl            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-81b311379d54.png">
-  <img src="images/commit-trend-light-6eac6e806d26.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-64b4ee227805.png">
+  <img src="images/commit-trend-light-651edea86b3a.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -69,5 +69,5 @@ Bbl            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年08月11日 04:34:13 (UTC+8)
+**最后更新**: 2026年08月11日 09:09:24 (UTC+8)
 
