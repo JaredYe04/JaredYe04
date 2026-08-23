@@ -53,8 +53,8 @@ Bat            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-58050a5ffebc.png">
-  <img src="images/commit-trend-light-a180c6ef0002.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-9702b01658e3.png">
+  <img src="images/commit-trend-light-2db7eb959cd7.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Bat            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年08月23日 04:15:04 (UTC+8)
+**最后更新**: 2026年08月23日 08:54:23 (UTC+8)
 
