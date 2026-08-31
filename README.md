@@ -18,25 +18,30 @@
 
 ```
 💬 编程语言: 
-Markdown       	1 小时 6 分钟           	█████████████████████████████████████████████████░	99.77 %
-JavaScript     	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.21 %
-YAML           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.01 %
-JSON           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.00 %
+JSON           	1 小时 2 分钟           	██████████████████████████░░░░░░░░░░░░░░░░░░░░░░░░	52.04 %
+Markdown       	43 分钟               	██████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	36.27 %
+JavaScript     	7 分钟                	███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	6.15 %
+Python         	3 分钟                	█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	2.84 %
+Wxss           	1 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.11 %
+YAML           	1 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	1.06 %
+Wxml           	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.43 %
+Jsonl          	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.05 %
+Other          	0 分钟                	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░	0.04 %
 
 ⏱️ 使用电脑时间: 
-总计 1 小时 7 分钟
+总计 2 小时 0 分钟
 
 📝 代码统计: 
-总代码行数 (LOC)      53,075 行
-提交次数               3 次
-活跃仓库数             1 个
+总代码行数 (LOC)      147,408 行
+提交次数               8 次
+活跃仓库数             4 个
 ```
 
 ###  📊 **编程语言占比**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-61548ac58e15.png">
-  <img src="images/language-pie-light-c4843035f7fb.png" alt="编程语言占比" width="600">
+  <source media="(prefers-color-scheme: dark)" srcset="images/language-pie-dark-dadcbdada8c9.png">
+  <img src="images/language-pie-light-889993dcc680.png" alt="编程语言占比" width="600">
 </picture>
 
 ###  📊 **主页浏览量**
@@ -47,8 +52,8 @@ JSON           	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-9e81cac5f2ef.png">
-  <img src="images/commit-trend-light-eb7188c96d78.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-2a6d6aae3a07.png">
+  <img src="images/commit-trend-light-619cd83e84af.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -61,5 +66,5 @@ JSON           	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年08月31日 10:47:09 (UTC+8)
+**最后更新**: 2026年08月31日 18:20:41 (UTC+8)
 
