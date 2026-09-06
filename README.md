@@ -53,8 +53,8 @@ Wxss           	1 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a0280782f5c6.png">
-  <img src="images/commit-trend-light-1f1f999f2949.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-c445ed54cfd1.png">
+  <img src="images/commit-trend-light-4b514e9ec505.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Wxss           	1 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年09月06日 05:50:44 (UTC+8)
+**最后更新**: 2026年09月06日 10:17:32 (UTC+8)
 
