@@ -52,8 +52,8 @@ Markdown       	2 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-79d23ad6012d.png">
-  <img src="images/commit-trend-light-b1b28778aa1f.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-13475108b18c.png">
+  <img src="images/commit-trend-light-a78919e4bb74.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ Markdown       	2 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年09月10日 06:09:31 (UTC+8)
+**最后更新**: 2026年09月10日 10:29:30 (UTC+8)
 
