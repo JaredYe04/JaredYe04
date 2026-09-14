@@ -53,8 +53,8 @@ Mdc            	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-4ac6c4386ab3.png">
-  <img src="images/commit-trend-light-9247ba3b10d8.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-f4ca71d33693.png">
+  <img src="images/commit-trend-light-5302a2e863c2.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Mdc            	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年09月14日 05:59:58 (UTC+8)
+**最后更新**: 2026年09月14日 10:46:45 (UTC+8)
 
