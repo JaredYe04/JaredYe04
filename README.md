@@ -52,8 +52,8 @@ Vue            	1 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-db4565dc30d6.png">
-  <img src="images/commit-trend-light-ef203b7a6077.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a22e4f7554ec.png">
+  <img src="images/commit-trend-light-3fcc0c396f4a.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ Vue            	1 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年09月28日 06:44:37 (UTC+8)
+**最后更新**: 2026年09月28日 10:56:45 (UTC+8)
 
