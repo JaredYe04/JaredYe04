@@ -52,8 +52,8 @@ TOML           	3 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-7e3ecc3819fe.png">
-  <img src="images/commit-trend-light-977d27e1e2f4.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-f5c3094edc4e.png">
+  <img src="images/commit-trend-light-26d43b67de83.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ TOML           	3 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年10月05日 06:39:46 (UTC+8)
+**最后更新**: 2026年10月05日 11:25:52 (UTC+8)
 
