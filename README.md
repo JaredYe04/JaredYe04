@@ -53,8 +53,8 @@ Cls            	28 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-4172d061080f.png">
-  <img src="images/commit-trend-light-95e12360738f.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-750ff24d77a8.png">
+  <img src="images/commit-trend-light-584646ab2c42.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Cls            	28 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年10月10日 07:45:52 (UTC+8)
+**最后更新**: 2026年10月10日 11:44:42 (UTC+8)
 
