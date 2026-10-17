@@ -52,8 +52,8 @@ Mqh            	1 小时 12 分钟          	█░░░░░░░░░░�
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-926dbfbd79b3.png">
-  <img src="images/commit-trend-light-7afa3d7053f4.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-255a00789686.png">
+  <img src="images/commit-trend-light-5a4d7779f217.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -66,5 +66,5 @@ Mqh            	1 小时 12 分钟          	█░░░░░░░░░░�
 
 ---
 
-**最后更新**: 2026年10月17日 06:23:24 (UTC+8)
+**最后更新**: 2026年10月17日 10:28:51 (UTC+8)
 
