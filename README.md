@@ -53,8 +53,8 @@ Tex            	1 小时 17 分钟          	█░░░░░░░░░░�
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-e5fad25fda99.png">
-  <img src="images/commit-trend-light-07af523272ee.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-f05669c087cc.png">
+  <img src="images/commit-trend-light-ed2345af47c2.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Tex            	1 小时 17 分钟          	█░░░░░░░░░░�
 
 ---
 
-**最后更新**: 2026年10月24日 06:48:46 (UTC+8)
+**最后更新**: 2026年10月24日 10:48:12 (UTC+8)
 
