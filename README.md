@@ -53,8 +53,8 @@ Rust           	1 小时 11 分钟          	░░░░░░░░░░░�
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-56197d05c989.png">
-  <img src="images/commit-trend-light-b9dbcaea81f5.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-40d3b5783d45.png">
+  <img src="images/commit-trend-light-ee2f19d8d3bd.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Rust           	1 小时 11 分钟          	░░░░░░░░░░░�
 
 ---
 
-**最后更新**: 2026年10月25日 06:10:54 (UTC+8)
+**最后更新**: 2026年10月25日 10:39:33 (UTC+8)
 
