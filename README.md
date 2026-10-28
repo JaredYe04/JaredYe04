@@ -53,8 +53,8 @@ PowerShell     	39 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-3226f8cd523d.png">
-  <img src="images/commit-trend-light-50da301c0810.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-057cadb14587.png">
+  <img src="images/commit-trend-light-0a2e62a4603f.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ PowerShell     	39 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年10月28日 07:26:31 (UTC+8)
+**最后更新**: 2026年10月28日 11:26:38 (UTC+8)
 
