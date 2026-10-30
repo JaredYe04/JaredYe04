@@ -53,8 +53,8 @@ Aspec          	56 分钟               	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a3740c0d9678.png">
-  <img src="images/commit-trend-light-d96c1c65c831.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a1daec38520c.png">
+  <img src="images/commit-trend-light-a20be2f96af5.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Aspec          	56 分钟               	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年10月30日 07:45:13 (UTC+8)
+**最后更新**: 2026年10月30日 11:52:18 (UTC+8)
 
