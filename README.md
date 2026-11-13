@@ -46,8 +46,8 @@ Ecnu           	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-b1532aed35ac.png">
-  <img src="images/commit-trend-light-197c8f9e655c.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-ab84db79764f.png">
+  <img src="images/commit-trend-light-8178be403354.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -60,5 +60,5 @@ Ecnu           	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年11月13日 24:29:42 (UTC+8)
+**最后更新**: 2026年11月13日 08:50:13 (UTC+8)
 
