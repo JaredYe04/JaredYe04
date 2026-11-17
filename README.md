@@ -53,8 +53,8 @@ Guispec        	0 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-a17884747efb.png">
-  <img src="images/commit-trend-light-a86eb4d9a4f3.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-f3de4f6e3294.png">
+  <img src="images/commit-trend-light-af2902edc964.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Guispec        	0 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年11月17日 01:45:11 (UTC+8)
+**最后更新**: 2026年11月17日 10:43:32 (UTC+8)
 
