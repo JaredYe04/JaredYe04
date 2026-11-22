@@ -53,8 +53,8 @@ Bbl            	3 分钟                	░░░░░░░░░░░░░
   📈 **过去30天提交趋势**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-6358288f5604.png">
-  <img src="images/commit-trend-light-a2454658641f.png" alt="提交趋势图" width="1000">
+  <source media="(prefers-color-scheme: dark)" srcset="images/commit-trend-dark-57b1fe06a641.png">
+  <img src="images/commit-trend-light-725a1f58fdee.png" alt="提交趋势图" width="1000">
 </picture>
 
 
@@ -67,5 +67,5 @@ Bbl            	3 分钟                	░░░░░░░░░░░░░
 
 ---
 
-**最后更新**: 2026年11月22日 02:42:24 (UTC+8)
+**最后更新**: 2026年11月22日 08:01:00 (UTC+8)
 
